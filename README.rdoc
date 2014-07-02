@@ -1,0 +1,28 @@
+== README
+
+This project Ruby Test Framework is the third version of the Fred's Test Framework.
+The first one was in Tcl, the second in Perl and this one in Ruby.
+
+The main idea behind the project is to gather all the script snippets, 
+libraries, tools used for integration testing into one place and to keep
+all of them documented and tested.
+
+With the previous version, this approach as been particularly efficient
+to be the base of very fast development of tools or test environments.
+
+It is also an interesting exercise while learning a new language because it 
+covers a large scope of features:  
+
+
+The framework is a set of tools, scripts, libraries and tests:
+
+* Self documented
+
+* Unit tested
+
+* Continuously integrated under Jenkins
+
+* ...
+
+
+This documentation is generated using "rdoc README.rdoc templates/" in the project top directory.
