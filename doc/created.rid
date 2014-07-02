@@ -1,3 +1,7 @@
-Wed, 02 Jul 2014 10:17:24 +0200
+Wed, 02 Jul 2014 15:18:19 +0200
 README.rdoc	Wed, 02 Jul 2014 09:48:15 +0200
-templates/script.rb	Wed, 02 Jul 2014 10:17:20 +0200
+templates/UnitTest.rb	Wed, 02 Jul 2014 15:16:30 +0200
+templates/all_tests.rb	Wed, 02 Jul 2014 15:17:45 +0200
+templates/script.rb	Wed, 02 Jul 2014 14:40:38 +0200
+templates/meme.rb	Wed, 02 Jul 2014 15:01:12 +0200
+templates/meme_tu.rb	Wed, 02 Jul 2014 15:06:07 +0200

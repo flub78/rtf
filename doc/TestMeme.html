@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Object - RDoc Documentation</title>
+<title>class TestMeme - RDoc Documentation</title>
 
 <link href="./fonts.css" rel="stylesheet">
 <link href="./rdoc.css" rel="stylesheet">
@@ -61,7 +61,7 @@
   <h3>Parent</h3>
 
   
-  <p class="link">BasicObject
+  <p class="link">MiniTest::Unit::TestCase
   
 </div>
 
@@ -73,9 +73,11 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-hello">#hello</a>
+    <li ><a href="#method-i-setup">#setup</a>
     
-    <li ><a href="#method-i-usage">#usage</a>
+    <li ><a href="#method-i-test_that_it_will_not_blend">#test_that_it_will_not_blend</a>
+    
+    <li ><a href="#method-i-test_that_kitty_can_eat">#test_that_kitty_can_eat</a>
     
   </ul>
 </div>
@@ -83,9 +85,9 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-Object">
-  <h1 id="class-Object" class="class">
-    class Object
+<main role="main" aria-labelledby="class-TestMeme">
+  <h1 id="class-TestMeme" class="class">
+    class TestMeme
   </h1>
 
   <section class="description">
@@ -111,10 +113,10 @@
        </header>
 
     
-      <div id="method-i-hello" class="method-detail ">
+      <div id="method-i-setup" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">hello</span><span
+          <span class="method-name">setup</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -124,15 +126,15 @@
 
         <div class="method-description">
           
-          <p>Prints hello world</p>
+          
           
           
 
           
-          <div class="method-source-code" id="hello-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 47</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">hello</span>
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Hello World&quot;</span>
+          <div class="method-source-code" id="setup-source">
+            <pre><span class="ruby-comment"># File templates/meme_tu.rb, line 6</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">setup</span>
+  <span class="ruby-ivar">@meme</span> = <span class="ruby-constant">Meme</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -144,10 +146,10 @@
       </div>
 
     
-      <div id="method-i-usage" class="method-detail ">
+      <div id="method-i-test_that_it_will_not_blend" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">usage</span><span
+          <span class="method-name">test_that_it_will_not_blend</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -157,42 +159,48 @@
 
         <div class="method-description">
           
-          <p>Display on line help</p>
+          
           
           
 
           
-          <div class="method-source-code" id="usage-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 15</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">usage</span> 
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Script template. 
-  
-  usage: ruby ./script.rb [options]
-  
-       Options:
-         -h,--help            brief help message
-         -v,--verbose         switch on verbose mode
-         -c,--count           example of integer option
-         -p,--pattern         pattern to search
-         -a,--all             process also hidden files
-         -m,--match           only process matching files
+          <div class="method-source-code" id="test_that_it_will_not_blend-source">
+            <pre><span class="ruby-comment"># File templates/meme_tu.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_that_it_will_not_blend</span>
+  <span class="ruby-identifier">refute_match</span> <span class="ruby-regexp">/^no/i</span>, <span class="ruby-ivar">@meme</span>.<span class="ruby-identifier">will_it_blend?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
           
-  Exemple:
-  
-      ruby ./script.rb --help
-      ruby ./script.rb --pattern &#39;def&#39; script.rb
-      
-  Features:
-  
-      This script has been designed as an example that you can modify easily
-      to adapt it to your needs. The treatment given as example counts a pattern
-      in several files given as parameters.
-  
-      - It is self documented using NaturalDocs (multi-languages, HTML, natural syntax)
-      - The command line is parsed using Getopt::Long;
-      - It supports a --help parameter
-      - It logs information using log4perl        
-&quot;</span>
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-test_that_kitty_can_eat" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">test_that_kitty_can_eat</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="test_that_kitty_can_eat-source">
+            <pre><span class="ruby-comment"># File templates/meme_tu.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_that_kitty_can_eat</span>
+  <span class="ruby-identifier">assert_equal</span> <span class="ruby-string">&quot;OHAI!&quot;</span>, <span class="ruby-ivar">@meme</span>.<span class="ruby-identifier">i_can_has_cheezburger?</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
