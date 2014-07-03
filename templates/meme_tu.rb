@@ -2,7 +2,7 @@
 require 'minitest/autorun'
 require "./meme.rb"
 
-class TestMeme < MiniTest::Unit::TestCase
+class TestMeme < MiniTest::Test
   def setup
     @meme = Meme.new
   end

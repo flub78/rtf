@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
-# Empty Ruby script
 #
-# This script:
+# === Name
+#
+# script.rb Empty Ruby script
+#
+# === Synopsis
 # * analyses its arguments
 # * Desiplay an onlye help if --help or -h are recognised
 # * Log some information
@@ -10,68 +13,84 @@
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
 require 'logger'
+require 'getoptlong'
+
+# specify the options we accept and initialize
+# the option parser
+opts = GetoptLong.new(
+[ "--size",    "-s",            GetoptLong::REQUIRED_ARGUMENT ],
+[ "--verbose", "-v",            GetoptLong::NO_ARGUMENT ],
+[ "--help",    "-h",            GetoptLong::NO_ARGUMENT ],
+[ "--check",   "--valid", "-c", GetoptLong::NO_ARGUMENT ]
+)
 
 # Display on line help
-def usage 
-  puts "Script template. 
-  
-  usage: ruby ./script.rb [options]
-  
+def usage
+  puts "Script template.
+
+  usage: ruby  #{$0} [options]* [filename]*
+
        Options:
          -h,--help            brief help message
          -v,--verbose         switch on verbose mode
-         -c,--count           example of integer option
+         -s,--size            example of integer option
          -p,--pattern         pattern to search
          -a,--all             process also hidden files
          -m,--match           only process matching files
-          
+
   Exemple:
-  
-      ruby ./script.rb --help
-      ruby ./script.rb --pattern 'def' script.rb
-      
+
+      ruby #{$0} --help
+      ruby #{$0} --pattern 'def' script.rb
+
   Features:
-  
+
       This script has been designed as an example that you can modify easily
       to adapt it to your needs. The treatment given as example counts a pattern
       in several files given as parameters.
-  
-      - It is self documented using NaturalDocs (multi-languages, HTML, natural syntax)
+
+      - It is self documented using rdoc
       - The command line is parsed using Getopt::Long;
       - It supports a --help parameter
-      - It logs information using log4perl        
+      - It logs information using a Ruby logger
 "
 end
 
-# Prints hello world
-def hello
-  puts "Hello World"
+# Process a file
+def process (filename)
+  puts "argument: #{filename}"
 end
-  
+
 verbose = false;
-log = Logger.new File.new('script.log', 'a+')
-  
-# Analyse CLI arguments
-ARGV.each do|a|
-  if (a == "--help" || a == "-h") 
+log = Logger.new File.new(File.basename($0, ".rb") << ".log", 'a+')
+
+# process the parsed options
+opts.each do |opt, arg|
+  puts "Option: #{opt}, arg #{arg.inspect}"
+  if (opt == "--help")
     usage
     exit
-    
-  elsif (a == "--verbose" || a == "-v")
-    verbose = true 
+
+  elsif (opt == "--verbose")
+    verbose = true
   end
-  
+
 end
+
+# puts "Remaining args: #{ARGV.join(', ')}"
 
 # Main processing
 # ---------------
-    
 if (verbose)
-  log.info "Script start" 
+  log.info "Script start"
+  puts "HOME=#{ENV['HOME']}"
+  puts "Ruby library path=#{$:}"
 end
-  
-hello
-    
+
+ARGV.each do |arg|
+  process (arg)
+end
+
 if (verbose)
-  log.info "bye." 
+  log.info "bye."
 end

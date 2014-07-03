@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Meme - cat command emulation</title>
+<title>class UnitTest - RDoc Documentation</title>
 
 <link href="./fonts.css" rel="stylesheet">
 <link href="./rdoc.css" rel="stylesheet">
@@ -61,7 +61,7 @@
   <h3>Parent</h3>
 
   
-  <p class="link"><a href="Object.html">Object</a>
+  <p class="link">MiniTest::Test
   
 </div>
 
@@ -73,9 +73,11 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-i_can_has_cheezburger-3F">#i_can_has_cheezburger?</a>
+    <li ><a href="#method-i-setup">#setup</a>
     
-    <li ><a href="#method-i-will_it_blend-3F">#will_it_blend?</a>
+    <li ><a href="#method-i-test_that_it_will_not_blend">#test_that_it_will_not_blend</a>
+    
+    <li ><a href="#method-i-test_that_kitty_can_eat">#test_that_kitty_can_eat</a>
     
   </ul>
 </div>
@@ -83,9 +85,9 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-Meme">
-  <h1 id="class-Meme" class="class">
-    class Meme
+<main role="main" aria-labelledby="class-UnitTest">
+  <h1 id="class-UnitTest" class="class">
+    class UnitTest
   </h1>
 
   <section class="description">
@@ -111,10 +113,10 @@
        </header>
 
     
-      <div id="method-i-i_can_has_cheezburger-3F" class="method-detail ">
+      <div id="method-i-setup" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">i_can_has_cheezburger?</span><span
+          <span class="method-name">setup</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -129,10 +131,10 @@
           
 
           
-          <div class="method-source-code" id="i_can_has_cheezburger-3F-source">
-            <pre><span class="ruby-comment"># File templates/meme.rb, line 2</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">i_can_has_cheezburger?</span>
-  <span class="ruby-string">&quot;OHAI!&quot;</span>
+          <div class="method-source-code" id="setup-source">
+            <pre><span class="ruby-comment"># File UnitTest.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">setup</span>
+  <span class="ruby-ivar">@name</span> = <span class="ruby-string">&quot;joe&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -144,10 +146,10 @@
       </div>
 
     
-      <div id="method-i-will_it_blend-3F" class="method-detail ">
+      <div id="method-i-test_that_it_will_not_blend" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">will_it_blend?</span><span
+          <span class="method-name">test_that_it_will_not_blend</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -162,10 +164,43 @@
           
 
           
-          <div class="method-source-code" id="will_it_blend-3F-source">
-            <pre><span class="ruby-comment"># File templates/meme.rb, line 6</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">will_it_blend?</span>
-  <span class="ruby-string">&quot;YES!&quot;</span>
+          <div class="method-source-code" id="test_that_it_will_not_blend-source">
+            <pre><span class="ruby-comment"># File UnitTest.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_that_it_will_not_blend</span>
+  <span class="ruby-identifier">refute_match</span> <span class="ruby-regexp">/^no/i</span>, <span class="ruby-ivar">@name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-test_that_kitty_can_eat" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">test_that_kitty_can_eat</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="test_that_kitty_can_eat-source">
+            <pre><span class="ruby-comment"># File UnitTest.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_that_kitty_can_eat</span>
+  <span class="ruby-identifier">assert_equal</span> <span class="ruby-string">&quot;joe&quot;</span>, <span class="ruby-ivar">@name</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

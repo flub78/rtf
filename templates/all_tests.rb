@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
 
-require "./UnitTest.rb"
-require "./meme_tu.rb"
+# Complete the Ruby library path
+$: <<  "."
+
+require "UnitTest"
+require "meme_tu"

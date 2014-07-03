@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Object - RDoc Documentation</title>
+<title>class Object - cat command emulation</title>
 
 <link href="./fonts.css" rel="stylesheet">
 <link href="./rdoc.css" rel="stylesheet">
@@ -73,7 +73,9 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-hello">#hello</a>
+    <li ><a href="#method-i-display">#display</a>
+    
+    <li ><a href="#method-i-process">#process</a>
     
     <li ><a href="#method-i-usage">#usage</a>
     
@@ -111,11 +113,11 @@
        </header>
 
     
-      <div id="method-i-hello" class="method-detail ">
+      <div id="method-i-display" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">hello</span><span
-            class="method-args">()</span>
+          <span class="method-name">display</span><span
+            class="method-args">(filename)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -124,15 +126,49 @@
 
         <div class="method-description">
           
-          <p>Prints hello world</p>
+          <p>Display a file</p>
           
           
 
           
-          <div class="method-source-code" id="hello-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 47</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">hello</span>
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Hello World&quot;</span>
+          <div class="method-source-code" id="display-source">
+            <pre><span class="ruby-comment"># File tools/cat.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">display</span> (<span class="ruby-identifier">filename</span>)
+  <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-string">&quot;rb&quot;</span>)
+  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-process" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process</span><span
+            class="method-args">(filename)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Process a file</p>
+          
+          
+
+          
+          <div class="method-source-code" id="process-source">
+            <pre><span class="ruby-comment"># File templates/script.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process</span> (<span class="ruby-identifier">filename</span>)
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;argument: #{filename}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -163,35 +199,35 @@
 
           
           <div class="method-source-code" id="usage-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 15</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">usage</span> 
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Script template. 
-  
-  usage: ruby ./script.rb [options]
-  
+            <pre><span class="ruby-comment"># File templates/script.rb, line 28</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">usage</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Script template.
+
+  usage: ruby  #{$0} [options]* [filename]*
+
        Options:
          -h,--help            brief help message
          -v,--verbose         switch on verbose mode
-         -c,--count           example of integer option
+         -s,--size            example of integer option
          -p,--pattern         pattern to search
          -a,--all             process also hidden files
          -m,--match           only process matching files
-          
+
   Exemple:
-  
-      ruby ./script.rb --help
-      ruby ./script.rb --pattern &#39;def&#39; script.rb
-      
+
+      ruby #{$0} --help
+      ruby #{$0} --pattern &#39;def&#39; script.rb
+
   Features:
-  
+
       This script has been designed as an example that you can modify easily
       to adapt it to your needs. The treatment given as example counts a pattern
       in several files given as parameters.
-  
-      - It is self documented using NaturalDocs (multi-languages, HTML, natural syntax)
+
+      - It is self documented using rdoc
       - The command line is parsed using Getopt::Long;
       - It supports a --help parameter
-      - It logs information using log4perl        
+      - It logs information using a Ruby logger
 &quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>

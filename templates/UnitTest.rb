@@ -11,7 +11,7 @@
 
 require 'minitest/autorun'
 
-class UnitTest < MiniTest::Unit::TestCase
+class UnitTest < MiniTest::Test
   def setup
     @name = "joe"
   end
