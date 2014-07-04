@@ -134,7 +134,7 @@
 
           
           <div class="method-source-code" id="display-source">
-            <pre><span class="ruby-comment"># File tools/cat.rb, line 43</span>
+            <pre><span class="ruby-comment"># File cat.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">display</span> (<span class="ruby-identifier">filename</span>)
   <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-string">&quot;rb&quot;</span>)
   <span class="ruby-identifier">puts</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">read</span>
@@ -169,7 +169,7 @@
 
           
           <div class="method-source-code" id="grep-source">
-            <pre><span class="ruby-comment"># File tools/search.rb, line 44</span>
+            <pre><span class="ruby-comment"># File search.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">grep</span> (<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">pattern</span>)
   <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-string">&quot;rb&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
 
@@ -194,7 +194,7 @@
         
         <div class="method-heading">
           <span class="method-name">process</span><span
-            class="method-args">(filename)</span>
+            class="method-args">(filename, pattern)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -209,9 +209,16 @@
 
           
           <div class="method-source-code" id="process-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 71</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">process</span> (<span class="ruby-identifier">filename</span>)
-  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;argument: #{filename}&quot;</span>
+            <pre><span class="ruby-comment"># File search.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process</span> (<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">pattern</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">filename</span>)
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;dir #{filename}&quot;</span>
+    <span class="ruby-constant">Find</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">filename</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">process</span>(<span class="ruby-identifier">f</span>, <span class="ruby-identifier">pattern</span>) <span class="ruby-keyword">if</span> (<span class="ruby-identifier">f</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;.&quot;</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&quot;..&quot;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">grep</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">pattern</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -242,35 +249,20 @@
 
           
           <div class="method-source-code" id="usage-source">
-            <pre><span class="ruby-comment"># File templates/script.rb, line 39</span>
+            <pre><span class="ruby-comment"># File cat.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">usage</span>
-  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Script template.
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;concatenate files and print on the standard output
 
-  usage: ruby  #{$0} [options]* [filename]*
+  usage: ruby #{$0} [options]* [filename]*
 
        Options:
          -h,--help            brief help message
          -v,--verbose         switch on verbose mode
-         -s,--size            example of integer option
-         -p,--pattern         pattern to search
-         -a,--all             process also hidden files
-         -m,--match           only process matching files
 
   Exemple:
 
       ruby #{$0} --help
-      ruby #{$0} --pattern &#39;def&#39; script.rb
-
-  Features:
-
-      This script has been designed as an example that you can modify easily
-      to adapt it to your needs. The treatment given as example counts a pattern
-      in several files given as parameters.
-
-      - It is self documented using rdoc
-      - The command line is parsed using Getopt::Long;
-      - It supports a --help parameter
-      - It logs information using a Ruby logger
+      ruby #{$0} #{$0}
 &quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>

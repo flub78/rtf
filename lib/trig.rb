@@ -1,5 +1,8 @@
 # require "Math"
 
+# Small trigonometric
+#
+# Ruby module example 
 module Trig
   PI = 3.141592654
   
@@ -9,7 +12,7 @@ module Trig
    # ..
   end
   
-  # Trigonometric Cin function
+  # Trigonometric Cos function
   def Trig.cos(x)
     return Math.cos(x)
   end

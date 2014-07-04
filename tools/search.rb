@@ -31,7 +31,7 @@ def usage
        Options:
          -h,--help            brief help message
          -v,--verbose         switch on verbose mode
-         -p, --pattern        pattern to look for 
+         -p, --pattern        pattern to look for
 
   Exemple:
 
@@ -42,13 +42,14 @@ end
 
 # Display a file
 def grep (filename, pattern)
-  file = File.open(filename, "rb")
-  counter = 1
-  while (line = file.gets)
+  File.open(filename, "rb") do |file|
+
+    counter = 1
+    while (line = file.gets)
       puts "#{filename}:#{counter}: #{line}" if (line.match( /#{pattern}/))
       counter = counter + 1
+    end
   end
-  file.close
 end
 
 # Process a file
@@ -70,7 +71,7 @@ opts.each do |opt, arg|
     exit
 
   elsif (opt == "--pattern")
-      pattern = arg
+    pattern = arg
 
   elsif (opt == "--verbose")
     verbose = true

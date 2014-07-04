@@ -25,4 +25,10 @@ The framework is a set of tools, scripts, libraries and tests:
 * ...
 
 
-This documentation is generated using "rdoc README.rdoc templates/" in the project top directory.
+This documentation is generated using "rdoc README.rdoc templates/ tools/ lib/" in the project top directory.
+
+// #TODO make an example of library class with unit test
+// #TODO connect with jenkins
+// #TODO create a TCP/IP client and server template
+// #TODO create a TCP/IP client and server template with openssl
+
