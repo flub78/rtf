@@ -4,7 +4,11 @@ class Set
   
   # Constructor
   def initialize(content)
-    @content     = content
+    @content = []
+    content.each do |elt| 
+      self.add(elt)
+    end
+    # @content     = content
   end
   
   # Image

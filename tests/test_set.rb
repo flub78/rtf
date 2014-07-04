@@ -8,6 +8,7 @@ class TestSet < MiniTest::Test
   def setup
     @set1 = Set.new(['a', 'b', 'c'])
     @empty = Set.new([])
+    @duplicated = Set.new(['a', 'b', 'c', 'b', 'b', 'a'])
   end
 
   def test_basic
@@ -39,5 +40,10 @@ class TestSet < MiniTest::Test
     assert_equal(0, @empty.size, "Size of the empty set")
   end
 
+  def test_duplicated
+    assert(@duplicated, "Duplicated set created")
+    assert_equal('["a", "b", "c"]', @duplicated.to_s, "image of the set with duplicated elements")
+    assert_equal(3, @duplicated.size, "Size of the duplicated set")
+  end
  
 end

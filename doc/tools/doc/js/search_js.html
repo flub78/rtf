@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>darkfish.js - cat command emulation</title>
+<title>search.js - cat command emulation</title>
 
 <link href="../../../fonts.css" rel="stylesheet">
 <link href="../../../rdoc.css" rel="stylesheet">
@@ -159,163 +159,117 @@
   </div>
 </nav>
 
-<main role="main" aria-label="Page templates/doc/js/darkfish.js">
+<main role="main" aria-label="Page tools/doc/js/search.js">
 
-<pre>Darkfish Page Functions
-$Id: darkfish.js 53 2009-01-07 02:52:03Z deveiant $
+<p>Search = function(data, input, result) {</p>
 
-Author: Michael Granger &lt;mgranger@laika.com&gt;
+<pre>this.data = data;
+this.$input = $(input);
+this.$result = $(result);
 
-Provide console simulation for firebug-less environments</pre>
+this.$current = null;
+this.$view = this.$result.parent();
+this.searcher = new Searcher(data.index);
+this.init();</pre>
 
-<p>if (!(“console” in window) || !(“firebug” in console)) {</p>
+<p>}</p>
 
-<pre>var names = [&quot;log&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, &quot;assert&quot;, &quot;dir&quot;, &quot;dirxml&quot;,
-  &quot;group&quot;, &quot;groupEnd&quot;, &quot;time&quot;, &quot;timeEnd&quot;, &quot;count&quot;, &quot;trace&quot;, &quot;profile&quot;, &quot;profileEnd&quot;];
+<p>Search.prototype = $.extend({}, Navigation, new function() {</p>
 
-window.console = {};
-for (var i = 0; i &lt; names.length; ++i)
-  window.console[names[i]] = function() {};</pre>
+<pre>var suid = 1;
 
-<p>};</p>
-
-<p>/**</p>
-
-<pre> Unwrap the first element that matches the given @expr@ from the targets and return them.
-/</pre>
-
-<p>$.fn.unwrap = function( expr ) {</p>
-
-<pre>return this.each( function() {
-  $(this).parents( expr ).eq( 0 ).after( this ).remove();
-});</pre>
-
-<p>};</p>
-
-<p>function showSource( e ) {</p>
-
-<pre>var target = e.target;
-var codeSections = $(target).
-  parents(&#39;.method-detail&#39;).
-  find(&#39;.method-source-code&#39;);
-
-$(target).
-  parents(&#39;.method-detail&#39;).
-  find(&#39;.method-source-code&#39;).
-  slideToggle();</pre>
-
-<p>};</p>
-
-<p>function hookSourceViews() {</p>
-
-<pre>$(&#39;.method-heading&#39;).click( showSource );</pre>
-
-<p>};</p>
-
-<p>function toggleDebuggingSection() {</p>
-
-<pre>$(&#39;.debugging-section&#39;).slideToggle();</pre>
-
-<p>};</p>
-
-<p>function hookDebuggingToggle() {</p>
-
-<pre>$(&#39;#debugging-toggle img&#39;).click( toggleDebuggingSection );</pre>
-
-<p>};</p>
-
-<p>function hookSearch() {</p>
-
-<pre>var input  = $(&#39;#search-field&#39;).eq(0);
-var result = $(&#39;#search-results&#39;).eq(0);
-$(result).show();
-
-var search_section = $(&#39;#search-section&#39;).get(0);
-$(search_section).show();
-
-var search = new Search(search_data, input, result);
-
-search.renderItem = function(result) {
-  var li = document.createElement(&#39;li&#39;);
-  var html = &#39;&#39;;
-
-  // TODO add relative path to &lt;script&gt; per-page
-  html += &#39;&lt;p class=&quot;search-match&quot;&gt;&lt;a href=&quot;&#39; + rdoc_rel_prefix + result.path + &#39;&quot;&gt;&#39; + this.hlt(result.title);
-  if (result.params)
-    html += &#39;&lt;span class=&quot;params&quot;&gt;&#39; + result.params + &#39;&lt;/span&gt;&#39;;
-  html += &#39;&lt;/a&gt;&#39;;
-
-  if (result.namespace)
-    html += &#39;&lt;p class=&quot;search-namespace&quot;&gt;&#39; + this.hlt(result.namespace);
-
-  if (result.snippet)
-    html += &#39;&lt;div class=&quot;search-snippet&quot;&gt;&#39; + result.snippet + &#39;&lt;/div&gt;&#39;;
-
-  li.innerHTML = html;
-
-  return li;
-}
-
-search.select = function(result) {
-  var result_element = result.get(0);
-  window.location.href = result_element.firstChild.firstChild.href;
-}
-
-search.scrollIntoView = search.scrollInWindow;</pre>
-
-<p>};</p>
-
-<p>function highlightTarget( anchor ) {</p>
-
-<pre>console.debug( &quot;Highlighting target &#39;%s&#39;.&quot;, anchor );
-
-$(&quot;a[name]&quot;).each( function() {
-  if ( $(this).attr(&quot;name&quot;) == anchor ) {
-    if ( !$(this).parent().parent().hasClass(&#39;target-section&#39;) ) {
-      console.debug( &quot;Wrapping the target-section&quot; );
-      $(&#39;div.method-detail&#39;).unwrap( &#39;div.target-section&#39; );
-      $(this).parent().wrap( &#39;&lt;div class=&quot;target-section&quot;&gt;&lt;/div&gt;&#39; );
-    } else {
-      console.debug( &quot;Already wrapped.&quot; );
+this.init = function() {
+  var _this = this;
+  var observer = function(e) {
+    switch(e.originalEvent.keyCode) {
+      case 38: // Event.KEY_UP
+      case 40: // Event.KEY_DOWN
+        return;
     }
+    _this.search(_this.$input[0].value);
+  };
+  this.$input.keyup(observer);
+  this.$input.click(observer); // mac&#39;s clear field
+
+  this.searcher.ready(function(results, isLast) {
+    _this.addResults(results, isLast);
+  })
+
+  this.initNavigation();
+  this.setNavigationActive(false);
+}
+
+this.search = function(value, selectFirstMatch) {
+  value = jQuery.trim(value).toLowerCase();
+  if (value) {
+    this.setNavigationActive(true);
+  } else {
+    this.setNavigationActive(false);
   }
-});</pre>
 
-<p>};</p>
+  if (value == &#39;&#39;) {
+    this.lastQuery = value;
+    this.$result.empty();
+    this.$result.attr(&#39;aria-expanded&#39;, &#39;false&#39;);
+    this.setNavigationActive(false);
+  } else if (value != this.lastQuery) {
+    this.lastQuery = value;
+    this.$result.attr(&#39;aria-busy&#39;,     &#39;true&#39;);
+    this.$result.attr(&#39;aria-expanded&#39;, &#39;true&#39;);
+    this.firstRun = true;
+    this.searcher.find(value);
+  }
+}
 
-<p>function highlightLocationTarget() {</p>
+this.addResults = function(results, isLast) {
+  var target = this.$result.get(0);
+  if (this.firstRun &amp;&amp; (results.length &gt; 0 || isLast)) {
+    this.$current = null;
+    this.$result.empty();
+  }
 
-<pre>console.debug( &quot;Location hash: %s&quot;, window.location.hash );
-if ( ! window.location.hash || window.location.hash.length == 0 ) return;
+  for (var i=0, l = results.length; i &lt; l; i++) {
+    var item = this.renderItem.call(this, results[i]);
+    item.setAttribute(&#39;id&#39;, &#39;search-result-&#39; + target.childElementCount);
+    target.appendChild(item);
+  };
 
-var anchor = window.location.hash.substring(1);
-console.debug( &quot;Found anchor: %s; matching %s&quot;, anchor, &quot;a[name=&quot; + anchor + &quot;]&quot; );
+  if (this.firstRun &amp;&amp; results.length &gt; 0) {
+    this.firstRun = false;
+    this.$current = $(target.firstChild);
+    this.$current.addClass(&#39;search-selected&#39;);
+  }
+  if (jQuery.browser.msie) this.$element[0].className += &#39;&#39;;
 
-highlightTarget( anchor );</pre>
+  if (isLast) this.$result.attr(&#39;aria-busy&#39;, &#39;false&#39;);
+}
 
-<p>};</p>
+this.move = function(isDown) {
+  if (!this.$current) return;
+  var $next = this.$current[isDown ? &#39;next&#39; : &#39;prev&#39;]();
+  if ($next.length) {
+    this.$current.removeClass(&#39;search-selected&#39;);
+    $next.addClass(&#39;search-selected&#39;);
+    this.$input.attr(&#39;aria-activedescendant&#39;, $next.attr(&#39;id&#39;));
+    this.scrollIntoView($next[0], this.$view[0]);
+    this.$current = $next;
+    this.$input.val($next[0].firstChild.firstChild.text);
+    this.$input.select();
+  }
+  return true;
+}
 
-<p>function highlightClickTarget( event ) {</p>
+this.hlt = function(html) {
+  return this.escapeHTML(html).
+    replace(/\u0001/g, &#39;&lt;em&gt;&#39;).
+    replace(/\u0002/g, &#39;&lt;/em&gt;&#39;);
+}
 
-<pre>console.debug( &quot;Highlighting click target for event %o&quot;, event.target );
-try {
-  var anchor = $(event.target).attr( &#39;href&#39; ).substring(1);
-  console.debug( &quot;Found target anchor: %s&quot;, anchor );
-  highlightTarget( anchor );
-} catch ( err ) {
-  console.error( &quot;Exception while highlighting: %o&quot;, err );
-};</pre>
-
-<p>};</p>
-
-<p>$(document).ready( function() {</p>
-
-<pre>hookSourceViews();
-hookDebuggingToggle();
-hookSearch();
-highlightLocationTarget();
-
-$(&#39;ul.link-list a&#39;).bind( &quot;click&quot;, highlightClickTarget );</pre>
+this.escapeHTML = function(html) {
+  return html.replace(/[&amp;&lt;&gt;]/g, function(c) {
+    return &#39;&amp;#&#39; + c.charCodeAt(0) + &#39;;&#39;;
+  });
+}</pre>
 
 <p>});</p>
 </main>

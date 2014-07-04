@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>darkfish.js - cat command emulation</title>
+<title>navigation.js - cat command emulation</title>
 
 <link href="../../../fonts.css" rel="stylesheet">
 <link href="../../../rdoc.css" rel="stylesheet">
@@ -159,165 +159,150 @@
   </div>
 </nav>
 
-<main role="main" aria-label="Page templates/doc/js/darkfish.js">
+<main role="main" aria-label="Page tools/doc/js/navigation.js">
 
-<pre>Darkfish Page Functions
-$Id: darkfish.js 53 2009-01-07 02:52:03Z deveiant $
+<pre>Navigation allows movement using the arrow keys through the search results.
 
-Author: Michael Granger &lt;mgranger@laika.com&gt;
+When using this library you will need to set scrollIntoView to the
+appropriate function for your layout.  Use scrollInWindow if the container
+is not scrollable and scrollInElement if the container is a separate
+scrolling region.</pre>
 
-Provide console simulation for firebug-less environments</pre>
+<p>Navigation = new function() {</p>
 
-<p>if (!(“console” in window) || !(“firebug” in console)) {</p>
+<pre>this.initNavigation = function() {
+  var _this = this;
 
-<pre>var names = [&quot;log&quot;, &quot;debug&quot;, &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, &quot;assert&quot;, &quot;dir&quot;, &quot;dirxml&quot;,
-  &quot;group&quot;, &quot;groupEnd&quot;, &quot;time&quot;, &quot;timeEnd&quot;, &quot;count&quot;, &quot;trace&quot;, &quot;profile&quot;, &quot;profileEnd&quot;];
+  $(document).keydown(function(e) {
+    _this.onkeydown(e);
+  }).keyup(function(e) {
+    _this.onkeyup(e);
+  });
 
-window.console = {};
-for (var i = 0; i &lt; names.length; ++i)
-  window.console[names[i]] = function() {};</pre>
-
-<p>};</p>
-
-<p>/**</p>
-
-<pre> Unwrap the first element that matches the given @expr@ from the targets and return them.
-/</pre>
-
-<p>$.fn.unwrap = function( expr ) {</p>
-
-<pre>return this.each( function() {
-  $(this).parents( expr ).eq( 0 ).after( this ).remove();
-});</pre>
-
-<p>};</p>
-
-<p>function showSource( e ) {</p>
-
-<pre>var target = e.target;
-var codeSections = $(target).
-  parents(&#39;.method-detail&#39;).
-  find(&#39;.method-source-code&#39;);
-
-$(target).
-  parents(&#39;.method-detail&#39;).
-  find(&#39;.method-source-code&#39;).
-  slideToggle();</pre>
-
-<p>};</p>
-
-<p>function hookSourceViews() {</p>
-
-<pre>$(&#39;.method-heading&#39;).click( showSource );</pre>
-
-<p>};</p>
-
-<p>function toggleDebuggingSection() {</p>
-
-<pre>$(&#39;.debugging-section&#39;).slideToggle();</pre>
-
-<p>};</p>
-
-<p>function hookDebuggingToggle() {</p>
-
-<pre>$(&#39;#debugging-toggle img&#39;).click( toggleDebuggingSection );</pre>
-
-<p>};</p>
-
-<p>function hookSearch() {</p>
-
-<pre>var input  = $(&#39;#search-field&#39;).eq(0);
-var result = $(&#39;#search-results&#39;).eq(0);
-$(result).show();
-
-var search_section = $(&#39;#search-section&#39;).get(0);
-$(search_section).show();
-
-var search = new Search(search_data, input, result);
-
-search.renderItem = function(result) {
-  var li = document.createElement(&#39;li&#39;);
-  var html = &#39;&#39;;
-
-  // TODO add relative path to &lt;script&gt; per-page
-  html += &#39;&lt;p class=&quot;search-match&quot;&gt;&lt;a href=&quot;&#39; + rdoc_rel_prefix + result.path + &#39;&quot;&gt;&#39; + this.hlt(result.title);
-  if (result.params)
-    html += &#39;&lt;span class=&quot;params&quot;&gt;&#39; + result.params + &#39;&lt;/span&gt;&#39;;
-  html += &#39;&lt;/a&gt;&#39;;
-
-  if (result.namespace)
-    html += &#39;&lt;p class=&quot;search-namespace&quot;&gt;&#39; + this.hlt(result.namespace);
-
-  if (result.snippet)
-    html += &#39;&lt;div class=&quot;search-snippet&quot;&gt;&#39; + result.snippet + &#39;&lt;/div&gt;&#39;;
-
-  li.innerHTML = html;
-
-  return li;
+  this.navigationActive = true;
 }
 
-search.select = function(result) {
-  var result_element = result.get(0);
-  window.location.href = result_element.firstChild.firstChild.href;
+this.setNavigationActive = function(state) {
+  this.navigationActive = state;
+  this.clearMoveTimeout();
 }
 
-search.scrollIntoView = search.scrollInWindow;</pre>
+this.onkeyup = function(e) {
+  if (!this.navigationActive) return;
 
-<p>};</p>
-
-<p>function highlightTarget( anchor ) {</p>
-
-<pre>console.debug( &quot;Highlighting target &#39;%s&#39;.&quot;, anchor );
-
-$(&quot;a[name]&quot;).each( function() {
-  if ( $(this).attr(&quot;name&quot;) == anchor ) {
-    if ( !$(this).parent().parent().hasClass(&#39;target-section&#39;) ) {
-      console.debug( &quot;Wrapping the target-section&quot; );
-      $(&#39;div.method-detail&#39;).unwrap( &#39;div.target-section&#39; );
-      $(this).parent().wrap( &#39;&lt;div class=&quot;target-section&quot;&gt;&lt;/div&gt;&#39; );
-    } else {
-      console.debug( &quot;Already wrapped.&quot; );
-    }
+  switch(e.keyCode) {
+    case 37: //Event.KEY_LEFT:
+    case 38: //Event.KEY_UP:
+    case 39: //Event.KEY_RIGHT:
+    case 40: //Event.KEY_DOWN:
+      this.clearMoveTimeout();
+      break;
   }
-});</pre>
+}
 
-<p>};</p>
+this.onkeydown = function(e) {
+  if (!this.navigationActive) return;
+  switch(e.keyCode) {
+    case 37: //Event.KEY_LEFT:
+      if (this.moveLeft()) e.preventDefault();
+      break;
+    case 38: //Event.KEY_UP:
+      if (e.keyCode == 38 || e.ctrlKey) {
+        if (this.moveUp()) e.preventDefault();
+        this.startMoveTimeout(false);
+      }
+      break;
+    case 39: //Event.KEY_RIGHT:
+      if (this.moveRight()) e.preventDefault();
+      break;
+    case 40: //Event.KEY_DOWN:
+      if (e.keyCode == 40 || e.ctrlKey) {
+        if (this.moveDown()) e.preventDefault();
+        this.startMoveTimeout(true);
+      }
+      break;
+    case 13: //Event.KEY_RETURN:
+      if (this.$current)
+        e.preventDefault();
+        this.select(this.$current);
+      break;
+  }
+  if (e.ctrlKey &amp;&amp; e.shiftKey) this.select(this.$current);
+}
 
-<p>function highlightLocationTarget() {</p>
+this.clearMoveTimeout = function() {
+  clearTimeout(this.moveTimeout);
+  this.moveTimeout = null;
+}
 
-<pre>console.debug( &quot;Location hash: %s&quot;, window.location.hash );
-if ( ! window.location.hash || window.location.hash.length == 0 ) return;
+this.startMoveTimeout = function(isDown) {
+  if (!$.browser.mozilla &amp;&amp; !$.browser.opera) return;
+  if (this.moveTimeout) this.clearMoveTimeout();
+  var _this = this;
 
-var anchor = window.location.hash.substring(1);
-console.debug( &quot;Found anchor: %s; matching %s&quot;, anchor, &quot;a[name=&quot; + anchor + &quot;]&quot; );
+  var go = function() {
+    if (!_this.moveTimeout) return;
+    _this[isDown ? &#39;moveDown&#39; : &#39;moveUp&#39;]();
+    _this.moveTimout = setTimeout(go, 100);
+  }
+  this.moveTimeout = setTimeout(go, 200);
+}
 
-highlightTarget( anchor );</pre>
+this.moveRight = function() {
+}
 
-<p>};</p>
+this.moveLeft = function() {
+}
 
-<p>function highlightClickTarget( event ) {</p>
+this.move = function(isDown) {
+}
 
-<pre>console.debug( &quot;Highlighting click target for event %o&quot;, event.target );
-try {
-  var anchor = $(event.target).attr( &#39;href&#39; ).substring(1);
-  console.debug( &quot;Found target anchor: %s&quot;, anchor );
-  highlightTarget( anchor );
-} catch ( err ) {
-  console.error( &quot;Exception while highlighting: %o&quot;, err );
-};</pre>
+this.moveUp = function() {
+  return this.move(false);
+}
 
-<p>};</p>
+this.moveDown = function() {
+  return this.move(true);
+}
 
-<p>$(document).ready( function() {</p>
+/*
+   Scrolls to the given element in the scrollable element view.
+  /
+this.scrollInElement = function(element, view) {
+  var offset, viewHeight, viewScroll, height;
+  offset = element.offsetTop;
+  height = element.offsetHeight;
+  viewHeight = view.offsetHeight;
+  viewScroll = view.scrollTop;
 
-<pre>hookSourceViews();
-hookDebuggingToggle();
-hookSearch();
-highlightLocationTarget();
+  if (offset - viewScroll + height &gt; viewHeight) {
+    view.scrollTop = offset - viewHeight + height;
+  }
+  if (offset &lt; viewScroll) {
+    view.scrollTop = offset;
+  }
+}
 
-$(&#39;ul.link-list a&#39;).bind( &quot;click&quot;, highlightClickTarget );</pre>
+/*
+   Scrolls to the given element in the window.  The second argument is
+   ignored
+  /
+this.scrollInWindow = function(element, ignored) {
+  var offset, viewHeight, viewScroll, height;
+  offset = element.offsetTop;
+  height = element.offsetHeight;
+  viewHeight = window.innerHeight;
+  viewScroll = window.scrollY;
 
-<p>});</p>
+  if (offset - viewScroll + height &gt; viewHeight) {
+    window.scrollTo(window.scrollX, offset - viewHeight + height);
+  }
+  if (offset &lt; viewScroll) {
+    window.scrollTo(window.scrollX, offset);
+  }
+}</pre>
+
+<p>}</p>
 </main>
 
 
