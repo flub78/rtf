@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 require 'minitest/autorun'
-
-require "set.rb"
+require "myset.rb"
 
 # Trig module unit test
 class TestSet < MiniTest::Test
   def setup
-    @set1 = Set.new(['a', 'b', 'c'])
-    @empty = Set.new([])
-    @duplicated = Set.new(['a', 'b', 'c', 'b', 'b', 'a'])
+    @set1 = Myset.new(['a', 'b', 'c'])
+    @empty = Myset.new([])
+    @duplicated = Myset.new(['a', 'b', 'c', 'b', 'b', 'a'])
   end
 
   def test_basic

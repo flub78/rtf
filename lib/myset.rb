@@ -1,6 +1,6 @@
 
 # Ruby Sets management 
-class Set
+class Myset
   
   # Constructor
   def initialize(content)
@@ -8,7 +8,6 @@ class Set
     content.each do |elt| 
       self.add(elt)
     end
-    # @content     = content
   end
   
   # Image
