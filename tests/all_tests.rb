@@ -11,3 +11,4 @@ $: << "#{ENV['RTF']}/tests"
 
 require "test_set.rb"
 require "test_trig.rb"
+require "test_range.rb"

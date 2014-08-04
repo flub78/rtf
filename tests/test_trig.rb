@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'minitest/autorun'
-require "trig.rb"
+require "trig"
 
 # Trig module unit test
 class TestTrig < MiniTest::Test

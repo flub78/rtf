@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'minitest/autorun'
-require "myset.rb"
+require "myset"
 
 # Trig module unit test
 class TestSet < MiniTest::Test

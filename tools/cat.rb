@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# :title:cat command emulation
+# cat command emulation
 #
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
