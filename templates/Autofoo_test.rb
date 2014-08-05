@@ -10,13 +10,13 @@
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
 require 'minitest/autorun'
-require "./Foo"
+require "./AutoFoo"
 
 class UnitTest < MiniTest::Test
   
   def setup
-    @instance = Foo.new(:bar => 42)
-    @instance_with_default = Foo.new()
+    @instance = AutoFoo.new # (:bar => 42)
+    @instance_with_default = AutoFoo.new()
     
   end
 
