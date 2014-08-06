@@ -21,14 +21,13 @@
 #
 # Implementation
 #
-# Internaly a range is managed as an ordered list of Ruby ranges. 
+# Internaly a range is managed as an ordered list of Ruby ranges.
 
 # Define a special equality for Ruby ranges
 class Range
-  
   # Redefine a new equal
   def equal?(other_range)
-    
+
     if (self.begin != other_range.begin)
       return false
     end
@@ -100,8 +99,15 @@ class Ranges
   end
 
   # returns the number of subranges
-  def size()
+  def section_number()
     return @content.size()
+  end
+
+  # returns the number of elements
+  def size()
+    size = 0
+    @content.each {|subrange| size += subrange.size()}
+    size
   end
 
   # add a subrange
@@ -110,6 +116,7 @@ class Ranges
       @content << elt
     end
     @content.sort!{|a, b| a.first <=> b.first}
+    # self.normalize!
   end
 
   # remove a subrange
@@ -121,6 +128,100 @@ class Ranges
 
   # overwrite equality
   def ==(other_range)
+    a = self.normalize
+    return a.equal(other_range.normalize)
+  end
+
+  # iterator
+  def each (&blk)
+    @content.each do |subrange|
+      subrange.each(&blk)
+    end
+  end
+
+  # append operator
+  def << (elt)
+    # nothing to do if the element is already in the range
+    if (self.member?(elt))
+      return
+    end
+
+    if (self.size == 0)
+      # first subrange
+      self.add(elt..elt)
+      return
+    end
+
+    i = 0
+    @content.each do |subrange|
+
+      # if the new element must be included before
+      if (elt < subrange.begin)
+        if (elt.succ == subrange.begin)
+          # modify the range
+          @content[i] = elt .. subrange.end
+          break
+        else
+          self.add(elt..elt)
+          break
+        end
+      end
+      i += 1
+    end #each
+
+    self.normalize!
+
+  end
+
+  # merge adjacent sub ranges
+  def normalize!
+
+    previous = nil
+    @tmp = []
+    @content.each do |subrange|
+
+      if (previous == nil)
+        previous = subrange
+
+      elsif (!previous.exclude_end? && (previous.end.succ == subrange.begin) )
+        # adjacent ranges
+        previous = Range.new(previous.begin, subrange.end, subrange.exclude_end?)
+
+      elsif (previous.exclude_end? && (previous.end == subrange.begin) )
+        # adjacent ranges
+        previous = Range.new(previous.begin, subrange.end, subrange.exclude_end?)
+
+      else
+        @tmp.push previous
+        previous = subrange
+      end
+    end
+
+    if (previous != nil)
+      @tmp.push previous
+    end
+
+    @content = @tmp
+
+  end
+
+  # return a normalized copy
+  def normalize
+    obj = self
+    obj.normalize!
+    return obj
+  end
+
+  # Protected section
+  protected
+
+  # getter
+  def content
+    @content
+  end
+
+  # equality
+  def equal(other_range)
     # The following line does not work because 6..6 != 6...7
     # return @content == other_range.content
 
@@ -132,19 +233,11 @@ class Ranges
       if (!subrange.equal?(other_subrange))
         return false
       end
-      
+
     end #each
 
     return true
 
-  end
-
-  # Protected section
-  protected
-
-  # getter
-  def content
-    @content
   end
 
 end
