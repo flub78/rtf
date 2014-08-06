@@ -2,9 +2,13 @@
 require 'minitest/autorun'
 require "ranges"
 
-# Trig module unit test
+##############################################################################
+# Range module unit test
+##############################################################################
 class TestRanges < MiniTest::Test
+  ##############################################################################
   # Create a few ranges to work with
+  ##############################################################################
   def setup
     @delta = 1e-9
     @simple_range = Ranges.new([1...4])
@@ -19,10 +23,11 @@ class TestRanges < MiniTest::Test
     @alpha = Ranges.new(['a' .. 'h'])
 
     @incremental = @empty
-
   end
 
+  ##############################################################################
   # Check nominal behavior
+  ##############################################################################
   def test_nominal
     assert(@simple_range, "New range created")
     assert(@range2, "Range from range created")
@@ -30,11 +35,12 @@ class TestRanges < MiniTest::Test
     assert(@right, "@right")
 
     assert_equal("[1...4]", @simple_range.to_s, "@simple_range.to_s")
-    assert_equal("[1..4, 6...7, 8..10]", @range2.to_s, "@range2.to_s") 
-    
+    assert_equal("[1..4, 6...7, 8..10]", @range2.to_s, "@range2.to_s")
   end
 
+  ##############################################################################
   # Check errors detection
+  ##############################################################################
   def test_errors
     assert_raises (RuntimeError) {
       @not_range = Ranges.new([150,250])
@@ -43,10 +49,11 @@ class TestRanges < MiniTest::Test
     assert_raises (RuntimeError) {
       @mismatch = Ranges.new([150...250, 'a'..'c']);
     }
-
   end
 
+  ##############################################################################
   # Check range incremental build
+  ##############################################################################
   def test_incremental
 
     assert(@incremental, "Incremental range created")
@@ -75,6 +82,8 @@ class TestRanges < MiniTest::Test
     assert(@range2 == @incremental, "#{@range2.to_s} == #{@incremental.to_s}")
   end
 
+  ##############################################################################
+  ##############################################################################
   def test_iterator
     nb = 0
     @range2.each  do |elt|
@@ -83,17 +92,21 @@ class TestRanges < MiniTest::Test
     assert_equal(nb, @range2.size, "number of iteration")
   end
 
+  ##############################################################################
+  ##############################################################################
   def test_size
     assert_equal(8, @range2.size, "@range2.size")
     assert_equal(0, @empty.size, "empty.size")
     assert_equal(3, @range2.section_number, "@range2.section_number")
     assert_equal(0, @empty.size, "@empty.section_number")
   end
-  
+
+  ##############################################################################
+  ##############################################################################
   def test_append
     @rg = Ranges.new([])
     assert_equal(0, @rg.size, "@rg.size")
-    
+
     @rg << 8
     assert_equal(1, @rg.size, "@rg.size after append")
     assert(@rg.member?(8), "8 is in range " << @rg.to_s)
@@ -104,14 +117,21 @@ class TestRanges < MiniTest::Test
 
     @rg << 5
     assert(@rg.member?(5), "5 is in range " << @rg.to_s)
-    
+
     @rg << 4
     assert(@rg.member?(4), "4 is in range " << @rg.to_s)
 
-    @rg << 2    
-    @rg << 3    
-
+    @rg << 2
+    @rg << 3
   end
 
+  ##############################################################################
+  ##############################################################################
+  def test_union
+    union = @left + @right
+    assert_equal("[100..250, 300..450]", union.to_s, "#{@left} + #{@right} = #{union}")
 
+    intersection = @left * @right
+    assert_equal("[150..250, 350..450]", intersection.to_s, "#{@left} * #{@right} = #{intersection}")
+  end
 end

@@ -75,6 +75,8 @@
     
     <li ><a href="#method-i-setup">#setup</a>
     
+    <li ><a href="#method-i-test_default">#test_default</a>
+    
     <li ><a href="#method-i-test_that_it_will_not_blend">#test_that_it_will_not_blend</a>
     
     <li ><a href="#method-i-test_that_kitty_can_eat">#test_that_kitty_can_eat</a>
@@ -132,9 +134,52 @@
 
           
           <div class="method-source-code" id="setup-source">
-            <pre><span class="ruby-comment"># File templates/test.rb, line 15</span>
+            <pre><span class="ruby-comment"># File templates/Autofoo_test.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">setup</span>
-  <span class="ruby-ivar">@name</span> = <span class="ruby-string">&quot;joe&quot;</span>
+  <span class="ruby-ivar">@instance</span> = <span class="ruby-constant">AutoFoo</span>.<span class="ruby-identifier">new</span> <span class="ruby-comment"># (:bar =&gt; 42)</span>
+  <span class="ruby-ivar">@instance_with_default</span> = <span class="ruby-constant">AutoFoo</span>.<span class="ruby-identifier">new</span>()
+  
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-test_default" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">test_default</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="test_default-source">
+            <pre><span class="ruby-comment"># File templates/Autofoo_test.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_default</span>
+  <span class="ruby-identifier">assert</span>(<span class="ruby-ivar">@instance</span>, <span class="ruby-string">&quot;@instance created&quot;</span>)
+  <span class="ruby-identifier">assert</span>(<span class="ruby-ivar">@instance_with_default</span>, <span class="ruby-string">&quot;@instance_with_default created&quot;</span>)
+
+  <span class="ruby-identifier">assert_equal</span>(<span class="ruby-value">42</span>, <span class="ruby-ivar">@instance</span>.<span class="ruby-identifier">bar</span>(), <span class="ruby-string">&quot;Attribute initialized by constructor&quot;</span>)
+  <span class="ruby-ivar">@instance</span>.<span class="ruby-identifier">bar</span> = <span class="ruby-value">13</span>
+  <span class="ruby-identifier">assert_equal</span>(<span class="ruby-value">13</span>, <span class="ruby-ivar">@instance</span>.<span class="ruby-identifier">bar</span>(), <span class="ruby-string">&quot;Attribute modified bu setter&quot;</span>)
+
+  <span class="ruby-identifier">assert_equal</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-ivar">@instance_with_default</span>.<span class="ruby-identifier">bar</span>(), <span class="ruby-string">&quot;Default attribute&quot;</span>)
+  
 <span class="ruby-keyword">end</span></pre>
           </div>
           

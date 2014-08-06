@@ -1,31 +1,13 @@
-# Ruby Sets management
-#
-# Utility class used to handle ranges, merge them, etc.
-#
-# This class handles discontinuated ranges, there are a collection of ranges with
-# a lower and higher element.
-#
-# Basic operations include, generation method, merge, interserction and
-# the check that an element belongs or not to the range.
-#
-# API Example
-#
-#    @left = Range.new([100..200, 300..400]);
-#    @right = Range.new([150..250, 350..450]);
-#
-#    my $union = $left + $right;
-#    my $intersection = $left * $right;
-#
-#    print $left . " union " . $right . " = " . $union . "\n";
-#    print $left . " intersection " . $right . " = " . $intersection . "\n";
-#
-# Implementation
-#
-# Internaly a range is managed as an ordered list of Ruby ranges.
+# Ruby Ranges management
 
+##############################################################################
 # Define a special equality for Ruby ranges
+##############################################################################
 class Range
+  ##############################################################################
   # Redefine a new equal
+  # making x..y == x...z when z == y.succ
+  ##############################################################################
   def equal?(other_range)
 
     if (self.begin != other_range.begin)
@@ -52,10 +34,32 @@ class Range
   end
 end
 
+##############################################################################
 # Multiple section ranges
+#
+# This class handles discontinuated ranges, there are a collection of ranges with
+# a lower and higher element.
+#
+# Basic operations include, generation method, merge, interserction and
+# the check that an element belongs or not to the range.
+#
+# API Example
+#
+#    left = Range.new([100..200, 300..400]);
+#    right = Range.new([150..250, 350..450]);
+#
+#    union = left + right;
+#    intersection = left * $right;
+#
+# Implementation
+#
+# Internaly a range is managed as an ordered list of Ruby ranges.
+##############################################################################
 class Ranges
+  ##############################################################################
   # Constructor
-  def initialize(content)
+  ##############################################################################
+  def initialize(content = [])
     @content = []
 
     content.each do |elt|
@@ -76,17 +80,23 @@ class Ranges
     end
   end
 
+  ##############################################################################
   # Image
+  ##############################################################################
   def to_s
     return @content.to_s
   end
 
+  ##############################################################################
   # check if a subrange is in the range
+  ##############################################################################
   def include?(val)
     return @content.include?(val)
   end
 
+  ##############################################################################
   # check if an element is in the range
+  ##############################################################################
   def member?(val)
     # puts "@content #{@content.inspect}"
     @content.each do |subrange|
@@ -98,19 +108,25 @@ class Ranges
     return false
   end
 
+  ##############################################################################
   # returns the number of subranges
+  ##############################################################################
   def section_number()
     return @content.size()
   end
 
+  ##############################################################################
   # returns the number of elements
+  ##############################################################################
   def size()
     size = 0
     @content.each {|subrange| size += subrange.size()}
     size
   end
 
+  ##############################################################################
   # add a subrange
+  ##############################################################################
   def add(elt)
     if (!self.include?(elt))
       @content << elt
@@ -119,27 +135,35 @@ class Ranges
     # self.normalize!
   end
 
+  ##############################################################################
   # remove a subrange
+  ##############################################################################
   def delete(elt)
     if (self.include?(elt))
       @content.delete(elt)
     end
   end
 
+  ##############################################################################
   # overwrite equality
+  ##############################################################################
   def ==(other_range)
     a = self.normalize
     return a.equal(other_range.normalize)
   end
 
+  ##############################################################################
   # iterator
+  ##############################################################################
   def each (&blk)
     @content.each do |subrange|
       subrange.each(&blk)
     end
   end
 
+  ##############################################################################
   # append operator
+  ##############################################################################
   def << (elt)
     # nothing to do if the element is already in the range
     if (self.member?(elt))
@@ -153,6 +177,7 @@ class Ranges
     end
 
     i = 0
+    included = false
     @content.each do |subrange|
 
       # if the new element must be included before
@@ -160,20 +185,29 @@ class Ranges
         if (elt.succ == subrange.begin)
           # modify the range
           @content[i] = elt .. subrange.end
+          included = true
           break
         else
           self.add(elt..elt)
+          included = true
           break
         end
       end
       i += 1
     end #each
 
+    # if the new element must be included after
+    if (!included)
+      @content.push(elt..elt)
+    end
+
     self.normalize!
 
   end
 
+  ##############################################################################
   # merge adjacent sub ranges
+  ##############################################################################
   def normalize!
 
     previous = nil
@@ -205,22 +239,54 @@ class Ranges
 
   end
 
+  ##############################################################################
+  # union
+  ##############################################################################
+  def +(other)
+    res = self
+    other.each do |elt|
+      res << elt
+    end
+    return res
+  end
+
+  ##############################################################################
+  # intersection
+  ##############################################################################
+  def *(other)
+    res = Ranges.new
+    other.each do |elt|
+      if (self.member?(elt))
+        res << elt
+      end
+    end
+    return res
+  end
+
+  ##############################################################################
   # return a normalized copy
+  ##############################################################################
   def normalize
     obj = self
     obj.normalize!
     return obj
   end
 
+  ##############################################################################
   # Protected section
+  ##############################################################################
   protected
 
+  ##############################################################################
   # getter
+  ##############################################################################
   def content
     @content
   end
 
+  ##############################################################################
   # equality
+  ##############################################################################
   def equal(other_range)
     # The following line does not work because 6..6 != 6...7
     # return @content == other_range.content
