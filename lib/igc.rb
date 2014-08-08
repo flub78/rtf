@@ -15,7 +15,7 @@ class Igc
     @filename = filename
     @content = IO.readlines(filename)
   end
-  
+
   ########################################################
   # DIsplay file content
   ########################################################
@@ -23,8 +23,7 @@ class Igc
     puts "filename: #{@filename}"
     @content.each {|line| puts "#{line}"}
   end
-  
-    
+
   ########################################################
   # Process
   # B 121836 4721250N 00032408W A 01164 01164 12142203
@@ -44,23 +43,28 @@ class Igc
 
         longitude = $8.to_f + ($9.to_f + $10.to_f / 1000) / 60
         longitude *= -1.0 if ($11 == "W")
-        
+
         validity = $12
         palt = $13.to_i
         alt = $14.to_i
-        
+
         point = Coordinate.new(:hour => hour, :minute => minute, :second => second, :latitude => latitude,
-          :longitude => longitude, :validity => validity, :palt => palt, :alt => alt)  
+        :longitude => longitude, :validity => validity, :palt => palt, :alt => alt)
         # puts "#{point.to_s}"
 
         if (previous != nil)
-          delta = point - previous 
-          puts "#{$1}:#{$2}:#{$3} #{delta.to_s(true)}"
+          delta = point - previous
+          if (delta.kmh > 40)
+            
+            time = "#{$1}:#{$2}:#{$3}"
+            puts "#{time} #{delta.to_s(true)}, alt=#{alt} m, trk=#{format("%.0f", delta.trk)}"
+            # puts ""
+          end
         end
-        
+
         previous = point
-        
-      end # matching B 
+
+      end # matching B
     end # do
   end # process
 
