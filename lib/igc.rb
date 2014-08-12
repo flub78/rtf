@@ -30,6 +30,7 @@ class Igc
   ########################################################
   def process()
     previous = nil
+    previous_trk = nil
     @content.each do |line|
       # puts "#{line}"
       if (line =~ /^B.*/)
@@ -57,7 +58,8 @@ class Igc
           if (delta.kmh > 40)
             
             time = "#{$1}:#{$2}:#{$3}"
-            puts "#{time} #{delta.to_s(true)}, alt=#{alt} m, trk=#{format("%.0f", delta.trk)}"
+            puts "#{time} #{delta.to_s(true)}, alt=#{format("%4d", alt)} m, trk=#{format("%03.0f", delta.trk)}, dtrk=#{format("%+03.1f", delta.delta_trk_per_sec(previous_trk))}"
+            previous_trk = delta.trk
             # puts ""
           end
         end

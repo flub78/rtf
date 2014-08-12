@@ -27,7 +27,7 @@ class Delta_coordinate
     res = "time=#{@dtime}, alt=#{@dalt}, palt=#{@dpalt}, latitude=#{@dlatitude}, longitude=#{@dlongitude}"
     if (full)
       # res += "\ndistance=#{format("%.0f", self.distance)} m, "
-      res = "vs=#{format("%.0f", self.kmh)} km/h, vz=#{self.vz} m/s"
+      res = "vs=#{format("%3.0f", self.kmh)} km/h, vz=#{format("%+02.1f", self.vz)} m/s"
     end
   end
   
@@ -61,7 +61,8 @@ class Delta_coordinate
       end
     else
       trk = Math.atan2(dist_nord, dist_west) / Math::PI * 180.0
-      trk = (trk + 90.0).modulo(360.0)
+      # Now the angle is in degree
+      trk = (360.0 - trk + 90).modulo(360.0)        
     end
     return trk
   end
@@ -86,5 +87,37 @@ class Delta_coordinate
   def vz
     return @dalt.to_f / @dtime.to_f
   end
+  
+  ########################################################
+  # Returns the difference with previous track
+  ########################################################
+  def delta_trk (previous_trk)
+    if (previous_trk.nil?)
+      return 0
+    end
+    d = self.trk - previous_trk
+    if (d < -180.0)
+      d += 360.0
+    elsif (d > 180.0)
+      d -= 360.0 
+    end
+    return d
+  end
    
+  ########################################################
+  # Returns the difference with previous track
+  ########################################################
+  def delta_trk_per_sec (previous_trk)
+    if (previous_trk.nil?)
+      return 0
+    end
+    d = self.trk - previous_trk
+    if (d < -180.0)
+      d += 360.0
+    elsif (d > 180.0)
+      d -= 360.0 
+    end
+    return d /  @dtime.to_f
+  end
+
 end
