@@ -32,6 +32,15 @@ class Range
 
     return true
   end
+  
+  def size ()
+	s = self.last - self.first
+	if (!self.exclude_end?)
+		s += 1
+	end
+	return s
+  end
+  
 end
 
 ##############################################################################
@@ -60,6 +69,8 @@ class Ranges
   # Constructor
   ##############################################################################
   def initialize(content = [])
+  
+	# Content is a list of Ruby ranges
     @content = []
 
     content.each do |elt|
@@ -120,7 +131,9 @@ class Ranges
   ##############################################################################
   def size()
     size = 0
-    @content.each {|subrange| size += subrange.size()}
+    @content.each do |subrange|
+		size += subrange.size()
+	end
     size
   end
 
@@ -156,6 +169,7 @@ class Ranges
   # iterator
   ##############################################################################
   def each (&blk)
+  
     @content.each do |subrange|
       subrange.each(&blk)
     end
