@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.001135' skipped='0' failures='0' errors='0' name="TestTrig" assertions='6' tests='2'>
-  <testcase time='0.000900' name="test_pi_2" assertions='3'>
-  </testcase>
-  <testcase time='0.000235' name="test_trig_0" assertions='3'>
-  </testcase>
-</testsuite>

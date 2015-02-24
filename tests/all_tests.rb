@@ -9,8 +9,6 @@ end
 $: << "#{ENV['RTF']}/lib"
 $: << "#{ENV['RTF']}/tests"
 
-gem "minitest"
-
 require "test_set.rb"
 require "test_trig.rb"
 require "test_range.rb"

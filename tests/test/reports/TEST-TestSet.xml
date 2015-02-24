@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.000906' skipped='0' failures='0' errors='0' name="TestSet" assertions='16' tests='3'>
-  <testcase time='0.000232' name="test_empty_set" assertions='4'>
-  </testcase>
-  <testcase time='0.000322' name="test_duplicated" assertions='3'>
-  </testcase>
-  <testcase time='0.000352' name="test_basic" assertions='9'>
-  </testcase>
-</testsuite>
