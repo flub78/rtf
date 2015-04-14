@@ -27,6 +27,9 @@ class TestDBIMysql < MiniTest::Test
     ) ";
     
     @dbh.do(sql)
+      
+    row = @dbh.select_one("SELECT VERSION()")
+    puts "Server version: " + row[0]
 
   end
 
@@ -44,22 +47,11 @@ class TestDBIMysql < MiniTest::Test
         sql = "insert into simple01 (SongName, SongLength_s) VALUES (?, ?)"
         @dbh.do(sql, "Song #{i}", "#{i*10}")
     end
-    
-    # Select all rows from simple01
-    sth = @dbh.prepare('SELECT * FROM simple01')
-    sth.execute
-  
-    # Print out each row
-    sth.fetch do |row|
-      p row
-    end
-  
-    @dbh.select_all('select * from simple01') do | row |
+      
+    @dbh.select_all('select * from simple01;').each do | row |
       p row
     end
               
-    # Close the statement handle when done
-    sth.finish
     
     # Don't prepare, just do it!
     @dbh.do('delete from simple01 where SongLength_s > 10')
