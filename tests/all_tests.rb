@@ -11,8 +11,10 @@ $: << "#{ENV['RTF']}/tests"
 
 gem "minitest"
 
+require "test_assert.rb"
 require "test_set.rb"
 require "test_trig.rb"
 require "test_ranges.rb"
 require "test_hexstring.rb"
 require 'watir_1.rb'
+require 'test_dbi_mysql.rb'
