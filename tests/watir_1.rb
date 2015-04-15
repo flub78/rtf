@@ -31,16 +31,17 @@ class GoogleHomePage <MiniTest::Unit::TestCase
   end
   
   def screenshot(filename)
-    File.delete(filename) if File.exist?(filename)
-    assert(!File.exist?(filename), filename + " screenshot deleted")
-    @browser.screenshot.save(filename)
-    assert(File.exist?(filename), filename + " screenshot created")    
+    fn = ENV['RTF'] + '/tests/screenshots/' + filename
+    File.delete(fn) if File.exist?(fn)
+    assert(!File.exist?(fn), filename + " screenshot deleted")
+    @browser.screenshot.save(fn)
+    assert(File.exist?(fn), filename + " screenshot created")    
   end
   
   def test_there_should_be_text_About_Google
     @browser.goto("http://www.google.com")
     assert(@browser.text.include?("Google"))
-    screenshot('screenshots/google.png')
+    screenshot('google.png')
   end
   
   # test names must start by test_ or they will not be executed
@@ -52,7 +53,7 @@ class GoogleHomePage <MiniTest::Unit::TestCase
     @browser.text_field(:id => 'entry_1000000').set 'Watir'
 	
     @browser.textarea(:id => 'entry_1000001').set "I come here from Australia. \n The weather is great here."
-    screenshot('screenshots/watir.png')
+    screenshot('watir.png')
   end
   
 end
