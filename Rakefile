@@ -30,7 +30,7 @@ end
 desc "Cleanup generated files"
 task clean: [] do
   puts "cleaning"
-  FileUtils.rm_rf(Dir.glob("tests/screenshots/*"))
+  FileUtils.rm_rf(Dir.glob("tests/screenshots/*.png"))
   FileUtils.rm_rf(Dir.glob("html/*"))
 end
 
