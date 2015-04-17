@@ -9,7 +9,7 @@ require 'headless'
 # sudo gem install headless
 # sudo apt-get install xvfb (ubuntu, debian)
 # sudo yum install xorg-x11-server-Xvfb (fedora)
-class GoogleHomePage <MiniTest::Unit::TestCase
+class TestWebSite <MiniTest::Unit::TestCase
 
   # To force alphabetical order.
   # But having tests dependent on that is not recommended
