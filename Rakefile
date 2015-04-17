@@ -2,6 +2,7 @@
 # RTF rake file
 #
 require 'rdoc/task'
+require 'fileutils.rb'
 
 desc "Start RTF unit tests"
 task test: [] do
@@ -26,6 +27,12 @@ RDoc::Task.new  do |rdoc|
   rdoc.options << "--all"
 end
 
+desc "Cleanup generated files"
+task clean: [] do
+  puts "cleaning"
+  FileUtils.rm_rf(Dir.glob("tests/screenshots/*.png"))
+  FileUtils.rm_rf(Dir.glob("html/*"))
+end
 
 #task task_name: [:prerequisite_task, :another_task_we_depend_on] do
 #  # All your magic here

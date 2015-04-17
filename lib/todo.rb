@@ -4,14 +4,9 @@
 #
 # === Project todo list
 #
-# TODO make an example of library class with unit test
-#
-# TODO connect with jenkins
-#
-# TODO TCP/IP server and client
-#
 # TODO TCP/IP server and client with OpenSSL
-#
+# TODO Experiment on SOAP client and servers
+# TODO Experiment on cryptography
 module Todo
   Priorities = [:urgent, :normal, :low]
   
