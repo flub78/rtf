@@ -31,6 +31,9 @@ class TestDBIMysql < MiniTest::Test
     row = @dbh.select_one("SELECT VERSION()")
     puts "Server version: " + row[0]
 
+    row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
+    puts "Count: #{row[0]}" 
+
   end
 
   def teardown
