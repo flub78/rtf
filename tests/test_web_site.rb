@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 # require 'watir' to drive IE on windows	
 require 'watir-webdriver'	# to drive Firefox
-require './os.rb'
+require 'os.rb'
 require 'headless' if !OS.windows?
 
 # This is an example of WEB application test using WATIR
