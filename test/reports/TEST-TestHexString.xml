@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.000112' skipped='0' failures='0' errors='0' name="TestHexString" assertions='4' tests='1'>
+  <testcase time='0.000112' name="test_basic" assertions='4'>
+  </testcase>
+</testsuite>

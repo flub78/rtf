@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='15.452242' skipped='0' failures='0' errors='0' name="TestWebSite" assertions='6' tests='2'>
+  <testcase time='5.073544' name="test_there_should_be_text_About_Google" assertions='3'>
+  </testcase>
+  <testcase time='10.378698' name="test_watir_example" assertions='3'>
+  </testcase>
+</testsuite>

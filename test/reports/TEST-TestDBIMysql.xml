@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.048601' skipped='0' failures='0' errors='0' name="TestDBIMysql" assertions='2' tests='1'>
+  <testcase time='0.048601' name="test_basic" assertions='2'>
+  </testcase>
+</testsuite>

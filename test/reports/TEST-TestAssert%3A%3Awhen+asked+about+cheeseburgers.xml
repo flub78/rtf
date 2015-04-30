@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.001117' skipped='0' failures='0' errors='0' name="TestAssert::when asked about cheeseburgers" assertions='1' tests='1'>
+  <testcase time='0.001117' name="test_0001_must respond positively" assertions='1'>
+  </testcase>
+</testsuite>
