@@ -30,8 +30,9 @@ end
 desc "Cleanup generated files"
 task clean: [] do
   puts "cleaning"
-  FileUtils.rm_rf(Dir.glob("tests/screenshots/*.png"))
   FileUtils.rm_rf(Dir.glob("html/*"))
+  FileUtils.rm_rf(Dir.glob("tests/screenshots/*.png"))
+  FileUtils.rm_rf(Dir.glob("test/reports/*.xml"))
 end
 
 #task task_name: [:prerequisite_task, :another_task_we_depend_on] do
