@@ -71,6 +71,7 @@ class TestWebSite < Minitest::Test
     @browser.button(:name => 'submit').click
      
     puts @browser.text.include? 'Your response has been recorded.'
+    
   rescue Timeout::Error => e
       puts "Timeout error code=#{e.err} #{e.errstr}"
       assert(false, "Timeout on watir example")

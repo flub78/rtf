@@ -24,6 +24,9 @@ The framework is a set of tools, scripts, libraries and tests:
 
 * ...
 
+To run the tests:
+export RTF=/home/frederic/git/rtf
+rake test
 
 This documentation is generated using "rdoc README.rdoc templates/ tools/ lib/" in the project top directory.
 
