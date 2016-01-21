@@ -1,3 +1,4 @@
 *.log
 tests/test
 test/reports
+tools/results/
