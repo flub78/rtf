@@ -62,7 +62,12 @@ def process_file (template, results)
   file = File.open(template, "r")
   contents = file.read
   
-  processed = Mustache.render(contents, :planet => "World!")    
+  h = Hash[:planet => "World!",
+    :gentmpl_cmd => "#{$PROGRAM_NAME} #{$*}",
+    :gentmpl_date => Time.new.inspect,
+    :gentmpl_template => "#{template}"]
+  
+  processed = Mustache.render(contents, h)    
   File.open(results, 'w') { |file| file.write(processed) }
   
 end
