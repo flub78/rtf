@@ -16,19 +16,25 @@ class Metadata
     @dbh = DBI.connect(@dbdriver, @user, @password)
   end
 
+  # --------------------------------------------------------------------------------
   # Return the list of tables
+  # --------------------------------------------------------------------------------
   def tables
     query = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE `TABLE_SCHEMA` LIKE '#{@database}'"
     return self.select_col(query,0)
   end
 
+  # --------------------------------------------------------------------------------
   # returns the list of fields for a table
+  # --------------------------------------------------------------------------------
   def fields(table)
     query = "SELECT COLUMN_NAME FROM information_schema.`COLUMNS` WHERE TABLE_NAME = '#{table}'"
     return self.select_col(query,0)
   end
 
+  # --------------------------------------------------------------------------------
   # returns the field information on a field
+  # --------------------------------------------------------------------------------
   def field_info(table, field)
     query = "SELECT TABLE_NAME,COLUMN_NAME,COLUMN_DEFAULT,IS_NULLABLE,COLUMN_TYPE,COLUMN_KEY,EXTRA,COLUMN_COMMENT"
     query += " FROM information_schema.`COLUMNS` WHERE TABLE_NAME = '#{table}' and COLUMN_NAME = '#{field}'"
@@ -46,23 +52,61 @@ class Metadata
     end
   end
 
+  # --------------------------------------------------------------------------------
   # returns the list of views
+  # --------------------------------------------------------------------------------
   def views
     query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA` LIKE '#{@database}'"
     return self.select_col(query,0)
   end
 
+  # --------------------------------------------------------------------------------
+  # true if a table is a view
+  # false for non view and unknown tables
+  # --------------------------------------------------------------------------------
   def is_view?(table)
     query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}'"
     select = self.select_col(query,0)
     return (select.count() > 0)
   end
 
+  # --------------------------------------------------------------------------------
   # if a field is a foreign key returns information on the referenced table and field
+  # --------------------------------------------------------------------------------
   def foreign_key(table, field)
+    query = "SELECT REFERENCED_TABLE_SCHEMA,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME  FROM information_schema.`KEY_COLUMN_USAGE` "
+    query += "WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
+    
+    selection = self.select_all(query)
+    
+    if (selection.count < 1)
+      return {
+        :database => nil,
+        :table => nil,
+        :field => nil}
+    end
+    
+    result = {
+      :database => selection[0][0],
+      :table => selection[0][1],
+      :field => selection[0][2]}
+    return result
   end
 
+  # --------------------------------------------------------------------------------
+  # true for foreign keys 
+  # --------------------------------------------------------------------------------
+  def is_foreign_key?(table, field)
+    query = "SELECT REFERENCED_TABLE_SCHEMA,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME  FROM information_schema.`KEY_COLUMN_USAGE` "
+    query += "WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
+    
+    selection = self.select_all(query)
+    return selection[0][0]
+  end
+  
+  # --------------------------------------------------------------------------------
   # returns the table and field pointed by a view
+  # --------------------------------------------------------------------------------
   def reference(view, field)
     if (! self.is_view?(view))
       return [view, field]
@@ -87,7 +131,7 @@ class Metadata
           database = split[0].tr('`','')
           table = split[1].tr('`','')
           fld = split[2].tr('`','')
-          puts key + " =>    " + table + '---' + fld + "\n"
+          # puts key + " =>    " + table + '---' + fld + "\n"
           if (fld == field)
             return [table, fld]
           end

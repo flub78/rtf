@@ -2,3 +2,4 @@
 tests/test
 test/reports
 tools/results/
+templates/test
