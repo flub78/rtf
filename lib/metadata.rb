@@ -10,24 +10,30 @@ class Metadata
   # constructor
   def initialize(args={})
     @dbdriver = args[:dbdriver]
-    @database = args[:database]
     @user = args[:user]
     @password = args[:password]
+  end
+
+  def connect
     @dbh = DBI.connect(@dbdriver, @user, @password)
   end
 
+  def close
+    
+  end
+    
   # --------------------------------------------------------------------------------
   # Return the list of tables
   # --------------------------------------------------------------------------------
-  def tables
-    query = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE `TABLE_SCHEMA` LIKE '#{@database}'"
+  def tables(database)
+    query = "SELECT TABLE_NAME FROM information_schema.`TABLES` WHERE `TABLE_SCHEMA` LIKE '#{database}'"
     return self.select_col(query,0)
   end
 
   # --------------------------------------------------------------------------------
   # returns the list of fields for a table
   # --------------------------------------------------------------------------------
-  def fields(table)
+  def fields(database, table)
     query = "SELECT COLUMN_NAME FROM information_schema.`COLUMNS` WHERE TABLE_NAME = '#{table}'"
     return self.select_col(query,0)
   end
@@ -35,7 +41,7 @@ class Metadata
   # --------------------------------------------------------------------------------
   # returns the field information on a field
   # --------------------------------------------------------------------------------
-  def field_info(table, field)
+  def field_info(database, table, field)
     query = "SELECT TABLE_NAME,COLUMN_NAME,COLUMN_DEFAULT,IS_NULLABLE,COLUMN_TYPE,COLUMN_KEY,EXTRA,COLUMN_COMMENT"
     query += " FROM information_schema.`COLUMNS` WHERE TABLE_NAME = '#{table}' and COLUMN_NAME = '#{field}'"
     selection = self.select_all(query)
@@ -55,8 +61,8 @@ class Metadata
   # --------------------------------------------------------------------------------
   # returns the list of views
   # --------------------------------------------------------------------------------
-  def views
-    query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA` LIKE '#{@database}'"
+  def views(database)
+    query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA` LIKE '#{database}'"
     return self.select_col(query,0)
   end
 
@@ -64,8 +70,8 @@ class Metadata
   # true if a table is a view
   # false for non view and unknown tables
   # --------------------------------------------------------------------------------
-  def is_view?(table)
-    query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}'"
+  def is_view?(database, table)
+    query = "SELECT TABLE_NAME FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA`='#{database}' and `TABLE_NAME`='#{table}'"
     select = self.select_col(query,0)
     return (select.count() > 0)
   end
@@ -73,9 +79,9 @@ class Metadata
   # --------------------------------------------------------------------------------
   # if a field is a foreign key returns information on the referenced table and field
   # --------------------------------------------------------------------------------
-  def foreign_key(table, field)
+  def foreign_key(database, table, field)
     query = "SELECT REFERENCED_TABLE_SCHEMA,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME  FROM information_schema.`KEY_COLUMN_USAGE` "
-    query += "WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
+    query += "WHERE `TABLE_SCHEMA`='#{database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
     
     selection = self.select_all(query)
     
@@ -96,9 +102,9 @@ class Metadata
   # --------------------------------------------------------------------------------
   # true for foreign keys 
   # --------------------------------------------------------------------------------
-  def is_foreign_key?(table, field)
+  def is_foreign_key?(database, table, field)
     query = "SELECT REFERENCED_TABLE_SCHEMA,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME  FROM information_schema.`KEY_COLUMN_USAGE` "
-    query += "WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
+    query += "WHERE `TABLE_SCHEMA`='#{database}' and `TABLE_NAME`='#{table}' and `COLUMN_NAME`='#{field}' "
     
     selection = self.select_all(query)
     return selection[0][0]
@@ -107,12 +113,12 @@ class Metadata
   # --------------------------------------------------------------------------------
   # returns the table and field pointed by a view
   # --------------------------------------------------------------------------------
-  def reference(view, field)
-    if (! self.is_view?(view))
+  def reference(database, view, field)
+    if (! self.is_view?(database, view))
       return [view, field]
     end
     
-    query = "SELECT TABLE_NAME,VIEW_DEFINITION FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA`='#{@database}' and `TABLE_NAME`='#{view}'"
+    query = "SELECT TABLE_NAME,VIEW_DEFINITION FROM information_schema.`VIEWS` WHERE `TABLE_SCHEMA`='#{database}' and `TABLE_NAME`='#{view}'"
     res = self.select_one(query)
 
     select = res[1]
