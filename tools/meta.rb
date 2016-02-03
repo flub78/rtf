@@ -91,7 +91,7 @@ def process_file (template, result, mode="template")
     if File.stat(result).writable?
       FileUtils.link(template, result, :force => true)
     else
-      puts "file #{result} is not writable"
+      puts "\tfile #{result} is not writable"
     end
   else
     file = File.open(template, "r")
