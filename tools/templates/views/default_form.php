@@ -18,6 +18,9 @@
  *
  * This view is a standard form for CRUD create and edit using bootstrap.
  * @package vues
+ * 
+ * Generated : {{date}}
+ * From : {{template}}
  */
 ?>
 <?php $this->load->view('header'); ?>
@@ -48,6 +51,12 @@
 
 					<h2 class="form-heading"><?= isset($title) ? $title : "" ?></h2>
 					<?= form($table, $field_list, $values);?>
+					
+					{{#table1.fields}}
+					<label>{{name}}</label>
+					{{{input}}}
+					{{/table1.fields}}
+					
 					<div id='message'></div>
 					<p>&nbsp;</p>
 					<?= submit(translation($submit_label)); ?>

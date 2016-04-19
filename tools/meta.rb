@@ -69,15 +69,28 @@ def usage
       ruby #{$0} --help
   
     Generate mustache template
-      ruby #{$0} gen|generate source_dir result_dir
+      ruby #{$0} generate source_dir result_dir
 
     Clone directory structure (copy directories and create link on files)
-    ruby #{$0} clone source_dir result_dir
-
+      ruby #{$0} clone source_dir cloned_dir
+  
+      ruby #{$0} tables
+      ruby #{$0} views
+      ruby #{$0} --table=users_groups fields
+      ruby #{$0} --table=users_groups --field=user_id info
+      ruby #{$0} gen templates results
+  
   Template rules:
 
-  
+    {{cmd}} :      command
+    {{date}} :     processing date
+    {{template}} : source file  
 " 
+end
+
+def rules
+  str = "cou"
+  return str + str
 end
 
 # --------------------------------------------------------------------
@@ -97,10 +110,25 @@ def process_file (template, result, mode="template")
     file = File.open(template, "r")
     contents = file.read
   
+    tables = [
+      {:name => "table1", :fields => ["field1", "field2"]},
+      {:name => "table2", :fields => "aaaa"},
+      {:name => "table3", :fields => "bbbb"}
+    ]
+    
     h = Hash[:planet => "World!",
-      :gentmpl_cmd => "#{$PROGRAM_NAME} #{$*}",
-      :gentmpl_date => Time.new.inspect,
-      :gentmpl_template => "#{template}"]
+      :cmd => "#{$PROGRAM_NAME} #{$*}",
+      :date => Time.new.inspect,
+      :template => "#{template}",
+      :tables => tables,
+      :rules => rules,
+      "table2".to_sym => {:field1 => "table2222"},
+      :table1 => {:fields => [
+        {name: "first_name", input: "<input></input>"}, 
+        {name: "name", input: "<select></select>"}, 
+        {name: "birthdate"}]
+      }       
+      ]
   
     processed = Mustache.render(contents, h)    
     File.open(result, 'w') { |file| file.write(processed) }
@@ -142,6 +170,22 @@ def process (templates, results, mode="template")
 end
 
 # --------------------------------------------------------------------
+# Read the metadata and generate a hash
+#
+#   tables = {
+#     :table1 =>   
+#       {:name => "table1",
+#        :fields => {
+#           :fiedl1 => {:name => 'field1', :input => 'input1', :display => 'display1'},
+#           :field2 => {}}},
+# {:name => "table2", :fields => "aaaa"},
+# {:name => "table3", :fields => "bbbb"}
+# }
+# --------------------------------------------------------------------
+def gen_meta
+end
+ 
+# --------------------------------------------------------------------
 # List schema tables
 # --------------------------------------------------------------------
 def tables_list(database)
@@ -154,7 +198,7 @@ def tables_list(database)
 end
 
 # --------------------------------------------------------------------
-# List schema tables
+# List views
 # --------------------------------------------------------------------
 def views_list(database)
   puts "Views\n"
@@ -164,6 +208,57 @@ def views_list(database)
     puts "\t#{table}\n"
   end
 end
+
+# --------------------------------------------------------------------
+# Display field information
+# --------------------------------------------------------------------
+def field_info(database, table, field, mode='list')
+  puts "\t\t#{field}\n"
+  if (mode == 'info')
+    info = $metadata.field_info(database, table, field)
+    info.each do |key, value|
+      puts "\t\t\t#{key} => #{value}"
+    end
+  elsif (mode == 'display')
+    return $metadata.field_display(database, table, field)
+  elsif (mode == 'input')
+    return $metadata.field_input(database, table, field)
+  elsif (mode == 'rules')
+    return $metadata.field_rules(database, table, field)
+  end  
+end
+
+# --------------------------------------------------------------------
+# Display information for several fields
+# --------------------------------------------------------------------
+def display_fields(database, table, field, mode='list')
+  puts "\t#{table}\n"
+  fields = $metadata.fields(database, table)
+  if (field == nil)
+    fields.each do |field|
+      field_info(database, table, field, mode)
+    end
+  else
+    field_info(database, table, field, mode)
+  end
+end
+
+# --------------------------------------------------------------------
+# List fields
+# --------------------------------------------------------------------
+def fields_list(database, table, field, mode='list')
+  puts "Fields\n"
+
+  if (table == nil)
+    tables = $metadata.tables(database)
+    tables.each do |table|
+      display_fields(database, table, field, mode)
+    end
+  else
+    display_fields(database, table, field, mode)    
+  end
+end
+
 
 ###############
 # Main script #
@@ -206,7 +301,7 @@ action = ARGV[0]
 templates_dir = ARGV[1]
 results_dir = ARGV[2]
 
-actions = ['gen', 'generate', 'tables', 'views', 'fields', 'clone']
+actions = ['gen', 'generate', 'tables', 'views', 'fields', 'clone', 'info', 'input', 'display', 'rules']
 if (! actions.include? action)
   puts "Unknow action #{action} (try --help)"
   exit 0    
@@ -218,10 +313,18 @@ elsif (action == 'clone')
   process(templates_dir, results_dir, 'clone')  
 elsif (action == 'tables')
   tables_list($database)
-elsif (action == 'tables')
+elsif (action == 'views')
   views_list($database)
 elsif (action == 'fields')
-    # field_list($database, $table)
+  fields_list($database, $table, $field)
+elsif (action == 'info')
+  fields_list($database, $table, $field, 'info')
+elsif (action == 'input')
+  fields_list($database, $table, $field, 'input')
+elsif (action == 'display')
+  fields_list($database, $table, $field, 'display')
+elsif (action == 'rules')
+  fields_list($database, $table, $field, 'rules')
 end 
 
 
