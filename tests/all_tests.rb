@@ -11,6 +11,7 @@ $: << "#{ENV['RTF']}/tests"
 
 gem "minitest"
 
+# List of tests to execute
 require "test_assert.rb"
 require "test_set.rb"
 require "test_trig.rb"

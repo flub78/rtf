@@ -10,6 +10,13 @@ require 'dbi'
 # sudo gem install dbd-sqlite3
 # sudo gem install dbd-mysql
 class TestDBIMysql < MiniTest::Test
+  
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
+
   # --------------------------------------------------------------------------------
   # Before each test
   # --------------------------------------------------------------------------------

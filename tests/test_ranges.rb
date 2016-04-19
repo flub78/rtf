@@ -8,6 +8,12 @@ require "ranges"
 # Range module unit test
 ##############################################################################
 class TestRanges < MiniTest::Test
+  
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
   ##############################################################################
   # Create a few ranges to work with
   ##############################################################################

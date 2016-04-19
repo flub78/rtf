@@ -7,6 +7,13 @@ require 'HexString.rb'
 
 # Trig module unit test
 class TestHexString < MiniTest::Test
+  
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
+
   def setup
   end
 

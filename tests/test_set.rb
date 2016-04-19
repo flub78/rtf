@@ -4,6 +4,12 @@ require "myset"
 
 # Trig module unit test
 class TestSet < MiniTest::Test
+  
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
   def setup
     @set1 = Myset.new(['a', 'b', 'c'])
     @empty = Myset.new([])

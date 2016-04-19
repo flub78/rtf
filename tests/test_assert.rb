@@ -7,6 +7,11 @@ require 'minitest/autorun'
 # Simple example of sqlite access
 class TestAssert < MiniTest::Test
   
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
   def setup
   end
 
