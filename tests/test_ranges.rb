@@ -1,23 +1,20 @@
 #!/usr/bin/env ruby
-gem "minitest"
-
-require 'minitest/autorun'
+require File.dirname(__FILE__) + '/my_test.rb'
 require "ranges"
+
 
 ##############################################################################
 # Range module unit test
 ##############################################################################
-class TestRanges < MiniTest::Test
+class TestRanges < MyMiniTest
   
-  def initialize(args)
-    super(args)
-    puts "\n# Suite " + self.class.name + "\n"
-  end
   
   ##############################################################################
   # Create a few ranges to work with
   ##############################################################################
   def setup
+    comment(__method__.to_s)
+
     @delta = 1e-9
     @simple_range = Ranges.new([1...4])
     @empty = Ranges.new([])
@@ -37,6 +34,8 @@ class TestRanges < MiniTest::Test
   # Check nominal behavior
   ##############################################################################
   def test_nominal
+    comment(__method__.to_s)
+
     assert(@simple_range, "New range created")
     assert(@range2, "Range from range created")
     assert(@left, "@left")
@@ -50,6 +49,8 @@ class TestRanges < MiniTest::Test
   # Check errors detection
   ##############################################################################
   def test_errors
+    comment(__method__.to_s)
+
     assert_raises (RuntimeError) {
       @not_range = Ranges.new([150,250])
     }
@@ -63,6 +64,8 @@ class TestRanges < MiniTest::Test
   # Check range incremental build
   ##############################################################################
   def test_incremental
+
+    comment(__method__.to_s)
 
     assert(@incremental, "Incremental range created")
     assert_equal(0, @incremental.section_number, "Size of an empty range")
@@ -93,6 +96,8 @@ class TestRanges < MiniTest::Test
   ##############################################################################
   ##############################################################################
   def test_iterator
+    comment(__method__.to_s)
+
     nb = 0
     @range2.each  do |elt|
       nb += 1
@@ -103,6 +108,8 @@ class TestRanges < MiniTest::Test
   ##############################################################################
   ##############################################################################
   def test_size
+    comment(__method__.to_s)
+
     assert_equal(8, @range2.size, "@range2.size")
     assert_equal(0, @empty.size, "empty.size")
     assert_equal(3, @range2.section_number, "@range2.section_number")
@@ -112,6 +119,8 @@ class TestRanges < MiniTest::Test
   ##############################################################################
   ##############################################################################
   def test_append
+    comment(__method__.to_s)
+
     @rg = Ranges.new([])
     assert_equal(0, @rg.size, "@rg.size")
 
@@ -136,6 +145,8 @@ class TestRanges < MiniTest::Test
   ##############################################################################
   ##############################################################################
   def test_union
+    comment(__method__.to_s)
+
     union = @left + @right
     assert_equal("[100..250, 300..450]", union.to_s, "#{@left} + #{@right} = #{union}")
 
