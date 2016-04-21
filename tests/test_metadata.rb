@@ -2,11 +2,11 @@
 # Basic class unit test
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
-gem "minitest"
-require 'minitest/autorun'
+require File.dirname(__FILE__) + '/my_test.rb'
+
 require "metadata"
 
-class UnitTest < MiniTest::Test
+class UnitTest < MyMiniTest
   
   def setup
     @instance = Metadata.new(
@@ -19,6 +19,7 @@ class UnitTest < MiniTest::Test
   end
   
   def test_default
+    description('basic operations on database metadata access')
     assert(@instance, "@instance created")
     
     tables = @instance.tables('ci3')

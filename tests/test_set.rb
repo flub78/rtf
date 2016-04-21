@@ -22,7 +22,10 @@ class TestSet < MyMiniTest
   end
 
   def test_basic
-    comment(__method__.to_s)
+    
+    description(
+      'basic set operations',
+      'sets are predefined')
 
     assert(@set1, "Set created")
     assert_equal('["a", "b", "c"]', @set1.to_s, "image of the first set")
@@ -45,7 +48,7 @@ class TestSet < MyMiniTest
   end
     
   def test_empty_set
-    comment(__method__.to_s)
+    description()
     assert(@empty, "Empty set created")
     assert_equal('[]', @empty.to_s, "image of the empty set")
 
@@ -54,7 +57,7 @@ class TestSet < MyMiniTest
   end
 
   def test_duplicated
-    comment(__method__.to_s)
+    description('check sets created with duplicated elements')
 
     assert(@duplicated, "Duplicated set created")
     assert_equal('["a", "b", "c"]', @duplicated.to_s, "image of the set with duplicated elements")

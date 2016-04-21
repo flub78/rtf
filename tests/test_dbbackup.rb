@@ -2,12 +2,11 @@
 # Basic class unit test
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
-gem "minitest"
-require 'minitest/autorun'
+require File.dirname(__FILE__) + '/my_test.rb'
 require "metadata"
 require "dbBackup"
 
-class DbBackupTest < MiniTest::Test
+class DbBackupTest < MyMiniTest
   
   def setup
     @instance = Metadata.new(
@@ -22,6 +21,8 @@ class DbBackupTest < MiniTest::Test
   
   def test_default
     
+    description("database backup, restore, drop and create",
+      'called by user', 'several initial database states')
     assert(@instance, "@instance created")
     assert(@bckp, "@bckp created")
     
