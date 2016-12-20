@@ -1,15 +1,18 @@
 #!/usr/bin/env ruby
-
-gem "minitest"
-
-require 'minitest/autorun'
+require File.dirname(__FILE__) + '/my_test.rb'
 require 'dbi'
 
 # Simple example of sqlite access
 # sudo gem install dbi
 # sudo gem install dbd-sqlite3
 # sudo gem install dbd-mysql
-class TestDBIMysql < MiniTest::Test
+class TestDBIMysql < MyMiniTest
+  
+  def initialize(args)
+    super(args)
+  end
+  
+
   # --------------------------------------------------------------------------------
   # Before each test
   # --------------------------------------------------------------------------------
@@ -129,6 +132,7 @@ class TestDBIMysql < MiniTest::Test
   # Test basic database accesses
   # --------------------------------------------------------------------------------
   def test_basic
+    description('basic database queries')
     assert(@dbh, "Connected to database")
 
     row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
@@ -167,7 +171,7 @@ class TestDBIMysql < MiniTest::Test
   # Test access to information_schema tables
   # --------------------------------------------------------------------------------
   def test_views
-    puts "==============================================================="
+    description('basic views operation', 'called by user', 'an existing test database')
     assert(@dbh, "Connected to database")
 
     row = @dbh.select_one("SELECT COUNT(*) FROM information_schema.views;")
@@ -182,7 +186,6 @@ class TestDBIMysql < MiniTest::Test
 
     # Close the statement handle when done
     sth.finish
-    puts "==============================================================="
 
   end
   
@@ -192,6 +195,7 @@ class TestDBIMysql < MiniTest::Test
   # --------------------------------------------------------------------------------
   def test_schema
     
+    description('operations on database schema')
     # list of table
     puts "#\tList of tables:\n"
     schema = 'ci3'
