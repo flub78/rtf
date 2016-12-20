@@ -59,6 +59,34 @@ class Metadata
   end
 
   # --------------------------------------------------------------------------------
+  # returns the field information on a field
+  # --------------------------------------------------------------------------------
+  def field_display(database, table, field)
+    return "field_display(#{database}, #{table}, #{field})"
+  end
+
+# --------------------------------------------------------------------------------
+# returns the field information on a field
+# --------------------------------------------------------------------------------
+def field_input(database, table, field)
+  return "field_input(#{database}, #{table}, #{field})"
+end
+
+# --------------------------------------------------------------------------------
+# returns the field information on a field
+# --------------------------------------------------------------------------------
+def field_rules(database, table, field)
+  return "field_rules(#{database}, #{table}, #{field})"
+end
+
+# --------------------------------------------------------------------------------
+# returns the field information on a field
+# --------------------------------------------------------------------------------
+def field_basic_type(database, table, field)
+  return "field_basic_type(#{database}, #{table}, #{field})"
+end
+  
+  # --------------------------------------------------------------------------------
   # returns the list of views
   # --------------------------------------------------------------------------------
   def views(database)
