@@ -17,7 +17,7 @@ require "test_set.rb"
 require "test_trig.rb"
 require "test_ranges.rb"
 require "test_hexstring.rb"
-require 'test_web_site.rb'
+# require 'test_web_site.rb'
 require 'test_dbi_mysql.rb'
 require 'test_server.rb'
 require 'test_dbbackup.rb'
