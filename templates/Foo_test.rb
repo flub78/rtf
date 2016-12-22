@@ -1,14 +1,8 @@
 #!/usr/bin/env ruby
-# Empty Ruby script
-#
-# This script:
-# * analyses its arguments
-# * Desiplay an onlye help if --help or -h are recognised
-# * Log some information
-# * exit
-#
+# Basic class unit test
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
+gem "minitest"
 require 'minitest/autorun'
 require "./Foo"
 
@@ -30,6 +24,7 @@ class UnitTest < MiniTest::Test
 
     assert_equal(nil, @instance_with_default.bar(), "Default attribute")
     
+    @instance.hello("Fred")
   end
 
 end

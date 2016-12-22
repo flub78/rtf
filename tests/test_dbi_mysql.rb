@@ -1,15 +1,17 @@
 #!/usr/bin/env ruby
-
-gem "minitest"
-
-require 'minitest/autorun'
+require File.dirname(__FILE__) + '/my_test.rb'
 require 'dbi'
 
 # Simple example of sqlite access
 # sudo gem install dbi
 # sudo gem install dbd-sqlite3
 # sudo gem install dbd-mysql
-class TestDBIMysql < MiniTest::Test
+class TestDBIMysql < MyMiniTest
+  
+  def initialize(args)
+    super(args)
+  end
+  
 
   # --------------------------------------------------------------------------------
   # Before each test
@@ -20,6 +22,8 @@ class TestDBIMysql < MiniTest::Test
     # @db_type = "sqlite"
 
     if (@db_type == "mysql")
+      # mysql --user=testuser --password=testpwd
+      # use test;
       @dbh = DBI.connect('DBI:Mysql:test', 'testuser', 'testpwd')
     else
       @dbh = DBI.connect('DBI:SQLite3:test', 'testuser', 'testpwd')
@@ -36,15 +40,24 @@ class TestDBIMysql < MiniTest::Test
       `SongLength_s` int(11) NOT NULL
     ) ";
 
+=begin
+    mysql> show tables;
+    +----------------+
+    | Tables_in_test |
+    +----------------+
+    | simple01       |
+    +----------------+
+=end
+
     @dbh.do(sql)
 
     if (@db_type == "mysql")
       row = @dbh.select_one("SELECT VERSION()")
-      puts "Server version: " + row[0]
+      puts "Mysql server version: " + row[0]
     end
 
     row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
-    puts "Count: #{row[0]}" 
+    puts "Count: #{row[0]}"
 
   end
 
@@ -76,19 +89,18 @@ class TestDBIMysql < MiniTest::Test
   # --------------------------------------------------------------------------------
   def select_all(dbh, query)
     # read all
-    puts "###############################################################"
     begin
-      sth = dbh.execute(query)
-      rows = sth.fetch_all
-      count = rows.count
-      name_index = name_index(sth.column_names)
-      # p "name_intex=" + name_index.to_s
-      0.upto(count-1) do |i|
-        puts "#{i} SongName = \"#{rows[i][name_index['SongName']]}\", SongLength_s = \"#{rows[i][name_index['SongLength_s']]}\""
+      sth = dbh.prepare(query)
+      sth.execute
+            
+      rows = []
+      # There is a bug in ruby dbi fetch_all for mysql
+      while row=sth.fetch do
+        rows << Array.new(row)
       end
-
+      
       sth.finish
-      puts "###############################################################"
+      return rows
     rescue DBI::DatabaseError => e
       puts "Database error code=#{e.err} #{e.errstr}"
     end
@@ -99,12 +111,11 @@ class TestDBIMysql < MiniTest::Test
   # --------------------------------------------------------------------------------
   def select_one(dbh, query)
     # read all
-    puts "==============================================================="
     begin
       sth = dbh.execute(query)
       rows = sth.fetch_all
       count = rows.count
-      
+
       if (count > 0)
         return rows[0]
       else
@@ -112,7 +123,6 @@ class TestDBIMysql < MiniTest::Test
       end
 
       sth.finish
-      puts "==============================================================="
     rescue DBI::DatabaseError => e
       puts "Database error code=#{e.err} #{e.errstr}"
     end
@@ -122,7 +132,11 @@ class TestDBIMysql < MiniTest::Test
   # Test basic database accesses
   # --------------------------------------------------------------------------------
   def test_basic
+    description('basic database queries')
     assert(@dbh, "Connected to database")
+
+    row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
+    initial_count = row[0]
 
     # Insert some rows, use placeholders
     1.upto(13) do |i|
@@ -130,22 +144,70 @@ class TestDBIMysql < MiniTest::Test
       @dbh.do(sql, "Song #{i}", "#{i*10}")
     end
 
-    # read all
-    @dbh.select_all('select * from simple01;').each do | row |
-      # puts "<<<<SongName = \"#{row[0]}\", SongLength_s = \"#{row[1]}\""
+    query = 'select * from simple01'
+
+    rows = self.select_all(@dbh,query)
+    puts "#\tExample of select\n"   
+    rows.each do |row|
+      puts "#{row[0]} =>  #{row[1]}\n"      
     end
-
-    # Read everything with details
-    select_all(@dbh, 'select * from simple01;')
-
-    # Read one
-    res = select_one(@dbh, 'select * from simple01 where SongName="Song 5";')
-    puts "row = #{res[0]}, #{res[1]}"
     
-    select_one(@dbh, 'select * from simple02')
+    row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
+    count = row[0]
+    assert(count == initial_count + 13, "Correct number of created elements")
+
+    # Close the statement handle when done
 
     # Don't prepare, just do it!
     @dbh.do('delete from simple01')
+
+    row = @dbh.select_one("SELECT COUNT(*) FROM simple01;")
+    count = row[0]
+    assert(count == 0, "all elements have been deleted")
+
+  end
+
+  # --------------------------------------------------------------------------------
+  # Test access to information_schema tables
+  # --------------------------------------------------------------------------------
+  def test_views
+    description('basic views operation', 'called by user', 'an existing test database')
+    assert(@dbh, "Connected to database")
+
+    row = @dbh.select_one("SELECT COUNT(*) FROM information_schema.views;")
+    puts "Number of views = #{row[0]}\n"
+
+    sth = @dbh.prepare('select * from information_schema.views')
+    sth.execute
+    # Print out each row
+    while row=sth.fetch do
+      puts "#{row[2]} =>  #{row[3]}\n\n"
+    end
+
+    # Close the statement handle when done
+    sth.finish
+
+  end
+  
+  
+  # --------------------------------------------------------------------------------
+  # Test access to information_schema tables
+  # --------------------------------------------------------------------------------
+  def test_schema
+    
+    description('operations on database schema')
+    # list of table
+    puts "#\tList of tables:\n"
+    schema = 'ci3'
+    sth = @dbh.prepare("SELECT *  FROM information_schema.`TABLES` WHERE `TABLE_SCHEMA` LIKE 'ci3'")
+    sth.execute
+    # Print out each row
+    while row=sth.fetch do
+      puts "#{row[2]}, "
+     end
+     puts "\n"
+    sth.finish
+
   end
 
 end

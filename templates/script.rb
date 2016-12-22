@@ -6,7 +6,7 @@
 #
 # === Synopsis
 # * analyses its arguments
-# * Desiplay an onlye help if --help or -h are recognised
+# * Display online help if --help or -h are recognized
 # * Log some information
 # * exit
 #

@@ -4,6 +4,12 @@ require "trig"
 
 # Trig module unit test
 class TestTrig < MiniTest::Test
+  
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
   def setup
     @delta = 1e-9
   end

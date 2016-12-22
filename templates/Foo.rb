@@ -1,3 +1,8 @@
+# Class template
+
+##############################################################################
+# Define a class
+##############################################################################
 class Foo
   
   # constructor
@@ -14,4 +19,20 @@ class Foo
   def bar=(newval)
     @bar = newval
   end
+  
+  # method
+  def hello(name)
+    puts "Hello " + name
+  end
+  
+  ##############################################################################
+  # Protected section
+  ##############################################################################
+  protected
+
+  # method
+  def protected_hello(name)
+    puts "Protected hello " + name
+  end
+
 end

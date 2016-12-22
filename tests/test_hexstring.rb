@@ -1,16 +1,14 @@
 #!/usr/bin/env ruby
 
-gem "minitest"
+require File.dirname(__FILE__) + '/my_test.rb'
 
-require 'minitest/autorun'
 require 'HexString.rb'
 
 # Trig module unit test
-class TestHexString < MiniTest::Test
-  def setup
-  end
-
+class TestHexString < MyMiniTest
+  
   def test_basic
+    description('basic conversions between string and binary')
 	str = "0123456789ABCDEF"
 	bin = str.to_byte_string()
 	

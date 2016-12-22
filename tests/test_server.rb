@@ -17,6 +17,12 @@ require 'socket'
 # check that the server has replied somthing
 class TestServer < MiniTest::Test
   
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
+  
   def setup
     @s = TCPSocket.new 'localhost', 80
     assert(@s, 'connected to localhost')

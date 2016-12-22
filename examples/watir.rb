@@ -4,6 +4,7 @@ require "minitest/ci"
 require 'watir-webdriver'
 
 url = 'http://www.test.gvv.planeur-abbeville.fr/'
+url = 'http://localhost/gvv2/'
 
 @b = Watir::Browser.new
 @b.window.resize_to(1200, 900)

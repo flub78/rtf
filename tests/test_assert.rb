@@ -1,16 +1,16 @@
 #!/usr/bin/env ruby
 
-gem "minitest"
-
+require File.dirname(__FILE__) + '/my_test.rb'
 require 'minitest/autorun'
 
 # Simple example of sqlite access
-class TestAssert < MiniTest::Test
-  
+class TestAssert < MyMiniTest
+    
   def setup
   end
 
   def test_basic
+   description("basic assertion checks")
 	 assert(1 == 1, "1 == 1 is true")
   end
   

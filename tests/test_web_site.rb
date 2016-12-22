@@ -20,6 +20,12 @@ class TestWebSite < Minitest::Test
   #  :alpha
   # end   
   
+  def initialize(args)
+    super(args)
+    puts "\n# Suite " + self.class.name + "\n"
+  end
+  
+  
   # Code that run before each test
   def setup
     if !OS.windows? && !ENV['DISPLAY_TESTS']
@@ -71,6 +77,7 @@ class TestWebSite < Minitest::Test
     @browser.button(:name => 'submit').click
      
     puts @browser.text.include? 'Your response has been recorded.'
+    
   rescue Timeout::Error => e
       puts "Timeout error code=#{e.err} #{e.errstr}"
       assert(false, "Timeout on watir example")
