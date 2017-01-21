@@ -1,14 +1,11 @@
 #!/usr/bin/env ruby
-# Empty Ruby script
+# Empty Ruby unit test
 #
-# This script:
-# * analyses its arguments
-# * Desiplay an onlye help if --help or -h are recognised
-# * Log some information
-# * exit
+# This script is a unit Ruby unit test template
 #
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
+gem "minitest"
 require 'minitest/autorun'
 
 class UnitTest < MiniTest::Test

@@ -1,11 +1,5 @@
 #!/usr/bin/env ruby
-# Empty Ruby script
-#
-# This script:
-# * analyses its arguments
-# * Desiplay an onlye help if --help or -h are recognised
-# * Log some information
-# * exit
+# Autofoo unit test
 #
 # Author::    Frédéric  (mailto:fpeignot@x.y)
 
