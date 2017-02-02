@@ -28,7 +28,8 @@ To run the tests:
 export RTF=/home/frederic/git/rtf
 rake test
 
-This documentation is generated using "rdoc README.rdoc templates/ tools/ lib/" in the project top directory.
+To generate the HTML documentation:
+rake rdoc
 
 // #TODO make an example of library class with unit test
 // #TODO connect with jenkins
