@@ -4,6 +4,7 @@
 require 'rdoc/task'
 require 'fileutils.rb'
 
+# target test
 desc "Start RTF unit tests"
 task test: [] do
   
@@ -18,6 +19,7 @@ task test: [] do
   
 end
 
+# target rdoc
 RDoc::Task.new  do |rdoc|
   rdoc.main = "README.doc"
   rdoc.rdoc_files.include("README.rdoc")
@@ -27,10 +29,11 @@ RDoc::Task.new  do |rdoc|
   rdoc.options << "--all"
 end
 
+# target clean
 desc "Cleanup generated files"
 task clean: [] do
   puts "cleaning"
-  FileUtils.rm_rf(Dir.glob("html/*"))
+  FileUtils.rm_rf(Dir.glob("html"))
   FileUtils.rm_rf(Dir.glob("tests/screenshots/*.png"))
   FileUtils.rm_rf(Dir.glob("test/reports/*.xml"))
 end
