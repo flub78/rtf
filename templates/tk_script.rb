@@ -1,3 +1,7 @@
+#!/usr/bin/ruby
+#
+# Hello world in Tk
+#
 require 'tk'
 root = TkRoot.new { title "Ex1" }
 TkLabel.new(root) {
